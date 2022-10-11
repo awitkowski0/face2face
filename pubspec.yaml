@@ -38,6 +38,7 @@ dependencies:
   the_apple_sign_in: ^1.1.1
   provider: ^6.0.3
   camera: ^0.10.0+3
+  swipe_cards: ^1.0.0
 
 dev_dependencies:
   flutter_test:

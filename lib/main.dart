@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:face2face/chat.dart';
+import 'package:face2face/swipe.dart';
 import 'package:flutter/material.dart';
 
 import 'camera.dart';
@@ -21,11 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'face2face',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark),
+      theme: ThemeData(primarySwatch: Colors.red),
+      darkTheme: ThemeData(brightness: Brightness.dark),
       home: MyHomePage(cameras: _cameras),
     );
   }
@@ -94,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         case 0:
           return const ChatPage();
         case 2:
-          return const Text('Swipe');
+          return const SwipePage();
         default:
           return CameraPage(cameras: _cameras);
       }
