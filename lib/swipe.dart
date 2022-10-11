@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
-import 'content.dart';
+import 'page.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key, this.title}) : super(key: key);
@@ -17,32 +17,58 @@ class _SwipePage extends State<SwipePage> {
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
   MatchEngine? _matchEngine;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  final List<String> _names = [
-    "Red",
-    "Blue",
-    "Green",
-    "Yellow",
-    "Orange",
-    "Grey",
-    "Purple",
-    "Pink"
-  ];
-  final List<Color> _colors = [
-    Colors.red,
-    Colors.blue,
-    Colors.green,
-    Colors.yellow,
-    Colors.orange,
-    Colors.grey,
-    Colors.purple,
-    Colors.pink
+
+  // This would actually be populated from the database
+  final List<Content> pages = [
+    Content(
+      images: const <String>[
+        'assets/images/profiles/james0.jpeg',
+        'assets/images/profiles/james1.jpeg',
+        'assets/images/profiles/james2.jpeg',
+        'assets/images/profiles/james3.jpeg',
+      ],
+      displayName: 'James',
+      shortBio: 'I like to fish',
+      major: 'Actuary Science',
+      occupation: 'Student',
+      pronouns: 'He/Him',
+      age: 20,
+    ),
+    Content(
+      images: const <String>[
+        'assets/images/profiles/chris0.jpeg',
+        'assets/images/profiles/chris1.jpeg',
+        'assets/images/profiles/chris2.jpeg',
+        'assets/images/profiles/chris3.jpeg',
+      ],
+      displayName: 'Chris',
+      shortBio: 'I like to code',
+      major: 'Computer Science',
+      occupation: 'Software Engineer',
+      pronouns: 'He/Him',
+      age: 21,
+    ),
+    Content(
+      images: const <String>[
+        'assets/images/profiles/chase0.jpeg',
+        'assets/images/profiles/chase1.jpeg',
+        'assets/images/profiles/chase2.jpeg',
+        'assets/images/profiles/chase3.jpeg',
+      ],
+      displayName: 'Chase',
+      shortBio: 'I like to hike',
+      major: 'Mechanical Engineering',
+      occupation: 'Mechanic',
+      pronouns: 'He/Him',
+      age: 19,
+    )
   ];
 
   @override
   void initState() {
-    for (int i = 0; i < _names.length; i++) {
+    for (Content content in pages) {
       _swipeItems.add(SwipeItem(
-          content: Content(text: _names[i], color: _colors[i]),
+          content: content,
           likeAction: () {
             print('Test');
           },
@@ -66,17 +92,17 @@ class _SwipePage extends State<SwipePage> {
               matchEngine: _matchEngine!,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  alignment: Alignment.center,
-                  color: _swipeItems[index].content.color,
-                  child: Text(
-                    _swipeItems[index].content.text,
-                    style: const TextStyle(fontSize: 100),
-                  ),
+                  child:
+                    Image(
+                      image: AssetImage(_swipeItems[index].content.images[0]),
+                      fit: BoxFit.fitHeight,
+                    ),
+                    //Text(_swipeItems[index].content.displayName),
                 );
               },
               onStackFinished: () {},
               itemChanged: (SwipeItem item, int index) {
-                print("item: ${item.content.text}, index: $index");
+                print("item: ${item.content.displayName}, index: $index");
               },
               upSwipeAllowed: true,
               fillSpace: true,
