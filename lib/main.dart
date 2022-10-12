@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
         backgroundColor: Colors.transparent,
+        title: const Text('Page'),
         leading: IconButton(
           alignment: Alignment.centerLeft,
           icon: const Icon(
