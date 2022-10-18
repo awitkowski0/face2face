@@ -9,66 +9,46 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatState extends State<ChatPage> {
+  final List<String> names = <String>['Alex', 'Bob', 'Connor', "Dan"];
+  final List<String> messages = <String>['I\'m gonna be late to class', 'Hello', 'I LOVE FISHIN', 'Hey girl'];
+  int _chats = 2;
   @override
   Widget build(BuildContext context) {
     // This method is specific to the camera
     Widget _buildChat() {
       return Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        decoration: BoxDecoration(color: Color(0xFFFDCABE)),
-        child: Column(
-          children: [
-            Padding(padding: EdgeInsets.only(top: 60)),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width:2,
-                  color: Color(0xFF606060)
-                ),
-                color: Color(0xEFEF9A8E)
-              ),
-              width: MediaQuery.of(context).size.width - 20,
-              child: Row(
-                children: [
-                  Padding(padding: EdgeInsets.only(left:5)),
-                  Image.asset('assets/images/face2face.png'),
-                  Padding(padding: EdgeInsets.only(left:5)),
-                  Text("Name", style: TextStyle(fontSize: 20, fontFamily: "Roboto")),
-                  Container(
-                    width: 250,
-                    child: Text("Message", style: TextStyle(fontSize: 20, fontFamily: "Roboto"), textAlign: TextAlign.right,)
-                  )
-                ]
-              )
-            ),
-            Padding(padding: EdgeInsets.only(top: 10)),
-            Container(
+        padding: const EdgeInsets.only(top: 50.0, left: 8, right: 8),
+        decoration: BoxDecoration(color: Color(0xFFFAFAFF)),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8),
+          itemCount: 4,
+          itemBuilder: (BuildContext context, int index) {
+            return Container(
                 height: 50,
                 decoration: BoxDecoration(
                     border: Border.all(
                         width:2,
                         color: Color(0xFF606060)
                     ),
-                    color: Color(0xEFEF9A8E)
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Color(0xFFDDDDDD)
                 ),
                 width: MediaQuery.of(context).size.width - 20,
                 child: Row(
                     children: [
                       Padding(padding: EdgeInsets.only(left:5)),
                       Image.asset('assets/images/face2face.png'),
-                      Padding(padding: EdgeInsets.only(left:5)),
-                      Text("Name", style: TextStyle(fontSize: 20, fontFamily: "Roboto")),
-                      Container(
-                          width: 250,
-                          child: Text("Message", style: TextStyle(fontSize: 20, fontFamily: "Roboto"), textAlign: TextAlign.right,)
-                      )
+                      Padding(padding: EdgeInsets.only(left:8)),
+                      Text("${names[index]}", style: TextStyle(fontSize: 20, fontFamily: "Roboto")),
+                      Expanded(child: Container()),
+                      Text("${messages[index]}", style: TextStyle(fontSize: 15, fontFamily: "Roboto")),
+                      Padding(padding: EdgeInsets.only(right:8))
                     ]
                 )
-            ),
-          ],
-        ),
+            );
+          }
+        )
       );
     }
     return _buildChat();
