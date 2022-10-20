@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
-import 'page.dart';
+import '../models/user_model.dart';
+import '../models/users_model.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key, this.title}) : super(key: key);
@@ -18,57 +19,11 @@ class _SwipePage extends State<SwipePage> {
   MatchEngine? _matchEngine;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  // This would actually be populated from the database
-  final List<Content> pages = [
-    Content(
-      images: const <String>[
-        'assets/images/profiles/james0.jpeg',
-        'assets/images/profiles/james1.jpeg',
-        'assets/images/profiles/james2.jpeg',
-        'assets/images/profiles/james3.jpeg',
-      ],
-      displayName: 'James',
-      shortBio: 'I like to fish',
-      major: 'Actuary Science',
-      occupation: 'Student',
-      pronouns: 'He/Him',
-      age: 20,
-    ),
-    Content(
-      images: const <String>[
-        'assets/images/profiles/chris0.jpeg',
-        'assets/images/profiles/chris1.jpeg',
-        'assets/images/profiles/chris2.jpeg',
-        'assets/images/profiles/chris3.jpeg',
-      ],
-      displayName: 'Chris',
-      shortBio: 'I like to code',
-      major: 'Computer Science',
-      occupation: 'Software Engineer',
-      pronouns: 'He/Him',
-      age: 21,
-    ),
-    Content(
-      images: const <String>[
-        'assets/images/profiles/chase0.jpeg',
-        'assets/images/profiles/chase1.jpeg',
-        'assets/images/profiles/chase2.jpeg',
-        'assets/images/profiles/chase3.jpeg',
-      ],
-      displayName: 'Chase',
-      shortBio: 'I like to hike',
-      major: 'Mechanical Engineering',
-      occupation: 'Mechanic',
-      pronouns: 'He/Him',
-      age: 19,
-    )
-  ];
-
   @override
   void initState() {
-    for (Content content in pages) {
+    for (User user in users) {
       _swipeItems.add(SwipeItem(
-          content: content,
+          content: user,
           likeAction: () {
             print('Test');
           },

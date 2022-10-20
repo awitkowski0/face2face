@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 /// Content page provides the content for the swipe card
 ///
 /// This consists of a picture, name, bio, age, and distance
-class Content {
+class User {
   // UUID
   final UniqueKey uniqueKey;
   // Profile images, in order of preference
@@ -24,7 +24,7 @@ class Content {
   // Age of user
   final int? age;
 
-  Content({
+  User({
     this.images,
     this.displayName,
     this.shortBio,

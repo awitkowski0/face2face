@@ -11,6 +11,8 @@ class ChatPage extends StatefulWidget {
 class _ChatState extends State<ChatPage> {
   int _page = 0;
   int _chatIndex = 0;
+
+  // TODO: use Users from users_model.dart
   final List<String> names = <String>['Alex', 'Bob', 'Connor', "Dan"];
   final List<String> messages = <String>['I\'m gonna be late to class', 'Hello', 'I LOVE FISHIN', 'Hey girl'];
 
