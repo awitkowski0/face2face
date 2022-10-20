@@ -40,6 +40,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 1;
+  final List<String> pages = <String>['Chat', 'Camera', 'Swipe'];
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Page'),
+        title: Text('${pages[_currentIndex]}'),
         leading: IconButton(
           alignment: Alignment.centerLeft,
           icon: const Icon(
