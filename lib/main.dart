@@ -5,19 +5,73 @@ import 'package:face2face/swipe.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'camera.dart';
+import 'dart:async';
+import 'package:path/path.dart';
+import 'User.dart';
 
 late List<CameraDescription> _cameras;
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(
+    // Set the path to the database. Note: Using the `join` function from the
+    // `path` package is best practice to ensure the path is correctly
+    // constructed for each platform.
+    join(await getDatabasesPath(), 'app_database.db'),
+    onCreate: (db, version) {
+      // Run the CREATE TABLE statement on the database.
+      return db.execute(
+        'CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)',
+      );
+    },
+    version: 1
+  );
+
+  Future<void> insertUser(User user) async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Insert the User into the correct table. You might also specify the
+    // `conflictAlgorithm` to use in case the same usere is inserted twice.
+    //
+    // In this case, replace any previous data.
+    await db.insert(
+      'users',
+      user.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<User>> users() async {
+    // Get a reference to the database.
+    final db = await database;
+
+    // Query the table for all The Users.
+    final List<Map<String, dynamic>> maps = await db.query('users');
+
+    // Convert the List<Map<String, dynamic> into a List<User>.
+    return List.generate(maps.length, (i) {
+      return User(
+        id: maps[i]['id'],
+        name: maps[i]['name'],
+        age: maps[i]['age'],
+      );
+    });
+  }
+  
+  var matt = new User(id: 0, name: "Matt", age: 21);
+  await insertUser(matt);
+
+  List<User> us = await users();
+  print(await users());
 
   _cameras = await availableCameras();
-  runApp(MyApp());
+  runApp(MyApp(user: us.elementAt(0)));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+  final User? user;
+  MyApp({Key? key, this.user});
 
   var routes = <String, WidgetBuilder>{
     IntoChat.routeName: (BuildContext context) => new IntoChat(),
@@ -99,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget _buildBody() {
       switch (_currentIndex) {
         case 0:
-          return const ChatPage();
+          return ChatPage();
         case 2:
           return const SwipePage();
         default:

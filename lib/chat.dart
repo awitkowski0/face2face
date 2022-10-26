@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'User.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key})
@@ -48,7 +49,7 @@ class _ChatState extends State<ChatPage> {
                             icon: const Icon(Icons.chat_bubble_outline)),
                         Image.asset('assets/images/face2face.png'),
                         Padding(padding: EdgeInsets.only(left: 8)),
-                        Text("${names[index]}", style: TextStyle(
+                        Text('${names[index]}', style: TextStyle(
                             fontSize: 20,
                             fontFamily: "Roboto",
                             color: Color(0xFF000000))),
