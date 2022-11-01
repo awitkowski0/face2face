@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
-import 'page.dart';
+import '../page.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key, this.title}) : super(key: key);

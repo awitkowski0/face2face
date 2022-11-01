@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'Login.dart';
+import '../model.dart';
 
 class AccountPage extends StatelessWidget {
+  AccountPage({this.user});
+
   static const String routeName = "/Account";
+  final User? user;
 
   @override
   Widget build(BuildContext context) {
-    Widget buildBody(){
+    Widget buildBody() {
       return Container(
-        child: Column(
-          children: [
-            Text("Username: "),
-            Text("Email: "),
-            Text("Age: "),
-            Text("Gender: "),
-            Text("Interested in: ")
-          ],
-        )
+          child: Column(
+            children: [
+              Text("Username: ${user!.username}"),
+              Text("Email: ${user!.email}"),
+              Text("Password: ${user!.password}"),
+              Text("Age: ${user!.age}"),
+              Text("Gender: "),
+              Text("Interested in: ")
+            ],
+          )
       );
     }
     PreferredSizeWidget _buildAppBar() {

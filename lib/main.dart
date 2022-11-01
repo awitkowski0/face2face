@@ -1,81 +1,34 @@
 import 'package:camera/camera.dart';
-import 'package:face2face/Account.dart';
-import 'package:face2face/chat.dart';
-import 'package:face2face/swipe.dart';
+import 'package:face2face/view/Account.dart';
+import 'package:face2face/view/Login.dart';
+import 'package:face2face/auth.dart';
+import 'package:face2face/view/chat.dart';
+import 'package:face2face/view/swipe.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
-import 'camera.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:form_validator/form_validator.dart';
+import 'view/camera.dart';
 import 'dart:async';
 import 'package:path/path.dart';
-import 'User.dart';
+import 'model.dart';
 
 late List<CameraDescription> _cameras;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final database = openDatabase(
-    // Set the path to the database. Note: Using the `join` function from the
-    // `path` package is best practice to ensure the path is correctly
-    // constructed for each platform.
-    join(await getDatabasesPath(), 'app_database.db'),
-    onCreate: (db, version) {
-      // Run the CREATE TABLE statement on the database.
-      return db.execute(
-        'CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)',
-      );
-    },
-    version: 1
-  );
-
-  Future<void> insertUser(User user) async {
-    // Get a reference to the database.
-    final db = await database;
-
-    // Insert the User into the correct table. You might also specify the
-    // `conflictAlgorithm` to use in case the same usere is inserted twice.
-    //
-    // In this case, replace any previous data.
-    await db.insert(
-      'users',
-      user.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<List<User>> users() async {
-    // Get a reference to the database.
-    final db = await database;
-
-    // Query the table for all The Users.
-    final List<Map<String, dynamic>> maps = await db.query('users');
-
-    // Convert the List<Map<String, dynamic> into a List<User>.
-    return List.generate(maps.length, (i) {
-      return User(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        age: maps[i]['age'],
-      );
-    });
-  }
-  
-  var matt = new User(id: 0, name: "Matt", age: 21);
-  await insertUser(matt);
-
-  List<User> us = await users();
-  print(await users());
-
   _cameras = await availableCameras();
-  runApp(MyApp(user: us.elementAt(0)));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final User? user;
-  MyApp({Key? key, this.user});
+  MyApp({Key? key});
 
   var routes = <String, WidgetBuilder>{
     IntoChat.routeName: (BuildContext context) => new IntoChat(),
-    AccountPage.routeName: (BuildContext context) => new AccountPage()
+    AccountPage.routeName: (BuildContext context) => new AccountPage(user: null),
+    LoginForm.routeName: (BuildContext context) => new LoginForm(),
+    MyHomePage.routeName: (BuildContext context) => new MyHomePage(cameras: _cameras)
   };
   // This widget is the root of your application.
   @override
@@ -94,13 +47,17 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required List<CameraDescription> cameras}) : super(key: key) {
     _cameras = cameras;
   }
-
+  static final String routeName = "/home";
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 1;
+  bool _loggedIn = false;
+  bool _noAccount = false;
+  User user = User();
+  final _formKey = GlobalKey<FormState>();
   final List<String> pages = <String>['Chat', 'Camera', 'Swipe'];
 
   @override
@@ -142,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushNamed(context, AccountPage.routeName);
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context) => AccountPage(user: user)));
           },
         ),
         actions: const <Widget>[],
@@ -160,8 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
           return CameraPage(cameras: _cameras);
       }
     }
-
     // Main Application
+
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
@@ -169,5 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildBody(),
       bottomNavigationBar: _buildNavigationBar(),
     );
+
+
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'User.dart';
+import '../model.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key})
