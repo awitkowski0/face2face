@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<RegistrationPage> createState() => _RegistrationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _RegistrationState extends State<RegistrationPage> {
   ButtonStyle style = ButtonStyle(
       textStyle:
           MaterialStateProperty.all<TextStyle>(const TextStyle(fontSize: 40)),
@@ -19,6 +19,8 @@ class _MyHomePageState extends State<MyHomePage> {
         borderRadius: BorderRadius.circular(8.0),
         side: const BorderSide(color: Colors.transparent),
       )));
+
+  // TODO: Add logic for register, logging in, and navigating to the next page through a model that is accessed in this view
 
   @override
   Widget build(BuildContext context) {

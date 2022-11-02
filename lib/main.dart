@@ -1,4 +1,8 @@
 import 'package:camera/camera.dart';
+import 'package:face2face/models/user_model.dart';
+import 'package:face2face/views/main_view.dart';
+import 'package:face2face/views/registration_page_view.dart';
+import 'package:flutter/material.dart';
 import 'package:face2face/view/Account.dart';
 import 'package:face2face/view/Login.dart';
 import 'package:face2face/auth.dart';
@@ -14,14 +18,52 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'model.dart';
 
+// TODO:  do this better
 late List<CameraDescription> _cameras;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  _cameras = await availableCameras();
+  runApp(const MyApp());
   _cameras = await availableCameras();
   runApp(MyApp());
 }
 
+final User _user = User(
+  images: const <String>[
+    'assets/images/profiles/james0.jpeg',
+    'assets/images/profiles/james1.jpeg',
+    'assets/images/profiles/james2.jpeg',
+    'assets/images/profiles/james3.jpeg',
+  ],
+  displayName: 'James',
+  shortBio: 'I like to fish',
+  major: 'Actuary Science',
+  occupation: 'Student',
+  pronouns: 'He/Him',
+  age: 20,
+);
+
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    if (_user == null) {
+      return MaterialApp(
+        title: 'Face2Face',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        home: const RegistrationPage(title: 'Registration'),
+      );
+    } else {
+      return MaterialApp(
+        title: 'face2face',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
   MyApp({Key? key});
 
   var routes = <String, WidgetBuilder>{
@@ -103,10 +145,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 builder: (context) => AccountPage(user: user)));
           },
         ),
-        actions: const <Widget>[],
+        home: MyHomePage(cameras: _cameras),
       );
     }
-
+    
     // Our body, should be different for each page
     Widget _buildBody() {
       switch (_currentIndex) {
@@ -127,7 +169,5 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _buildBody(),
       bottomNavigationBar: _buildNavigationBar(),
     );
-
-
   }
 }
