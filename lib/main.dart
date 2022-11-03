@@ -1,8 +1,10 @@
 import 'package:camera/camera.dart';
 import 'package:face2face/models/user_model.dart';
+import 'package:face2face/view_model/viewModel.dart';
 import 'package:face2face/views/main_view.dart';
 import 'package:face2face/views/registration_page_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // TODO:  do this better
 late List<CameraDescription> _cameras;
@@ -11,7 +13,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   _cameras = await availableCameras();
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider<ChatViewModel>(
+    child: MyApp(),
+    create: (_) => ChatViewModel(), // Create a new ChangeNotifier object
+  ));
 }
 
 final User _user = User(
