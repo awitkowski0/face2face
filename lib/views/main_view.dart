@@ -1,7 +1,6 @@
 
 import 'package:camera/camera.dart';
 import 'package:face2face/views/swipe_view.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'camera_view.dart';
