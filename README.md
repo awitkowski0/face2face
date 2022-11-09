@@ -7,6 +7,11 @@ face2face is a mobile dating application aimed at connecting users through daily
 The target user for face2face are adults aged 18-30 who have previous experience with apps like BeReal, Snapchat, and Instagram.
 To serve these users, we have kept a User-Interace (UI) that matches like-products, created a easy user-experience, and have developed with personas in mind.
 
+## User Personas
+![Grace](grace.png)
+![Jacob](jacob.png)
+![Sarah](sarah.png)
+
 ## Getting Started (Development)
 
 If you would like to get started developing for face2face on your own or work on issues please fork the project.
