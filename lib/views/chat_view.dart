@@ -28,11 +28,40 @@ class _ChatState extends State<ChatPage> {
       //return messages.where((element) => element.senderName == _chatPerson).toList();
     //}
     
-    AlignmentGeometry getAl(sentByMe){
+    AlignmentGeometry getAl(bool sentByMe){
       if(sentByMe)
         return Alignment.centerRight;
       else
         return Alignment.centerLeft;
+    }
+    
+    Color? getColor(bool sentByMe){
+      if(sentByMe)
+        return Colors.blue[200];
+      else
+        return Colors.white;
+    }
+    
+    CrossAxisAlignment getNameAl(bool sentByMe){
+      if(sentByMe)
+        return CrossAxisAlignment.end;
+      else
+        return CrossAxisAlignment.start;
+    }
+
+    Widget displayMessage(chat message){
+      return Column(
+          crossAxisAlignment: getNameAl(message.sentByMe),
+          children: [
+            Text("${message.senderName}"),
+            Container(
+                constraints: BoxConstraints(maxWidth: 200),
+                decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(message.sentByMe)),
+                padding: EdgeInsets.all(10),
+                child: Text("${message.message}")
+            )
+          ]
+      );
     }
     
     // This method builds the chat
@@ -78,11 +107,19 @@ class _ChatState extends State<ChatPage> {
                                 fontSize: 20,
                                 fontFamily: "Roboto",
                                 color: Color(0xFF000000))),
-                            Expanded(child: Container()),
-                            Text("${messages[messages.length-1].message}", style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: "Roboto",
-                                color: Color(0xFF000000))),
+                            Expanded(child: Container(constraints: BoxConstraints(minWidth: 50),)),
+                            Flexible(
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text("${messages[messages.length-1].message}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: "Roboto",
+                                      color: Color(0xFF000000),
+                                  )
+                              )),
+                            ),
                             Padding(padding: EdgeInsets.only(right: 8))
                           ]
                       )
@@ -128,13 +165,8 @@ class _ChatState extends State<ChatPage> {
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
                               alignment: getAl(messages[index].sentByMe),
-                              child: Container(
-                                decoration: BoxDecoration(border: Border.all(color: Colors.black)),
-                                height: 50,
-                                width: 200,
-                                padding: EdgeInsets.all(10),
-                                child: Text("${messages[index].senderName}: ${messages[index].message}")
-                          ));
+                              child: displayMessage(messages[index]),
+                          );
                         },
                       )
                     )),
@@ -147,7 +179,7 @@ class _ChatState extends State<ChatPage> {
                           TextFormField(
                             controller: messageController,
                             decoration: const InputDecoration(
-                              hintText: 'Enter your email',
+                              hintText: 'Message',
                             ),
                             validator: (String? value) {
                               if (value == null || value.isEmpty) {
@@ -161,8 +193,9 @@ class _ChatState extends State<ChatPage> {
                             child: ElevatedButton(
                               onPressed: () {
                                 context.read<ChatViewModel>().sendChat(chat(messageController.text,"Hailey","Alex",true));
+                                messageController.text = "";
                               },
-                              child: const Text('Submit'),
+                              child: const Text('Send'),
                             ),
                           ),
                         ],

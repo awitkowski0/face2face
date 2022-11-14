@@ -6,7 +6,7 @@ import '../models/chat.dart';
 final List<chat> initialData = [
   chat('Hello', 'Alex', 'Hailey', false),
   chat('I like Fishin', 'Hailey', 'Alex', true),
-  chat('OMG me too!', 'Alex', 'Hailey', false),
+  chat('OMG me too! I like fishin and huntin! JACOB BIEHL', 'Alex', 'Hailey', false),
 ];
 
 class ChatViewModel with ChangeNotifier {
