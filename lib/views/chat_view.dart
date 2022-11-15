@@ -1,4 +1,4 @@
-import 'package:face2face/view_model/viewModel.dart';
+import 'package:face2face/view_models/chatViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/chat.dart';
@@ -13,17 +13,16 @@ class ChatPage extends StatefulWidget {
 
 class _ChatState extends State<ChatPage> {
   int _page = 0;
+  int _userIndex = 0;
   String _chatPerson = "";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController messageController = TextEditingController();
 
-  // TODO: use Users from users_model.dart
-  final List<String> names = <String>['Alex', 'Bob', 'Connor', "Dan"];
-  final List<String> messagesn = <String>['I\'m gonna be late to class', 'Hello', 'I LOVE FISHIN', 'Hey girl'];
-
   @override
   Widget build(BuildContext context) {
-    final List<chat> messages = context.watch<ChatViewModel>().chats;
+    final List<String> names = context.watch<ChatViewModel>().names;
+    final List<List<chat>> allMsg = context.watch<ChatViewModel>().byName;
+    final List<chat> messages = context.watch<ChatViewModel>().getNamedchats("Alex");
     //List<chat> getChatsPerUser() {
       //return messages.where((element) => element.senderName == _chatPerson).toList();
     //}
@@ -75,7 +74,7 @@ class _ChatState extends State<ChatPage> {
             padding: const EdgeInsets.only(top: 50.0, left: 8, right: 8),
             child: ListView.builder(
                 padding: const EdgeInsets.all(8),
-                itemCount: 1,
+                itemCount: allMsg.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                       height: 50,
@@ -97,13 +96,13 @@ class _ChatState extends State<ChatPage> {
                             IconButton(onPressed: () {
                               setState(() {
                                 _page = 1;
-                                _chatPerson = names[index];
+                                _userIndex = index;
                               });
                             },
                                 icon: const Icon(Icons.chat_bubble_outline)),
                             Image.asset('assets/images/face2face.png'),
                             Padding(padding: EdgeInsets.only(left: 8)),
-                            Text("${messages[index].senderName}", style: TextStyle(
+                            Text("${allMsg[index][0].senderName}", style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "Roboto",
                                 color: Color(0xFF000000))),
@@ -111,7 +110,7 @@ class _ChatState extends State<ChatPage> {
                             Flexible(
                               child: Align(
                                 alignment: Alignment.centerRight,
-                                child: Text("${messages[messages.length-1].message}",
+                                child: Text("${allMsg[index][allMsg[index].length-1].message}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 15,
@@ -146,7 +145,7 @@ class _ChatState extends State<ChatPage> {
                         },
                             icon: const Icon(Icons.arrow_back, color: Color(0xFF000000),)),
                         Text(
-                          "${_chatPerson}",
+                          "${names[_userIndex]}",
                           style: TextStyle(
                             fontSize: 20,
                             color: Color(0xFF000000)
@@ -161,11 +160,11 @@ class _ChatState extends State<ChatPage> {
                     flex: 5,
                     child: Container(
                       child: ListView.builder(
-                        itemCount: messages.length,
+                        itemCount: allMsg[_userIndex].length,
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
-                              alignment: getAl(messages[index].sentByMe),
-                              child: displayMessage(messages[index]),
+                              alignment: getAl(allMsg[_userIndex][index].sentByMe),
+                              child: displayMessage(allMsg[_userIndex][index]),
                           );
                         },
                       )
@@ -192,7 +191,7 @@ class _ChatState extends State<ChatPage> {
                             padding: const EdgeInsets.symmetric(vertical: 16.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                context.read<ChatViewModel>().sendChat(chat(messageController.text,"Hailey","Alex",true));
+                                context.read<ChatViewModel>().sendChat(chat(messageController.text,"Hailey",names[_userIndex],true));
                                 messageController.text = "";
                               },
                               child: const Text('Send'),

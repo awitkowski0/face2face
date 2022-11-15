@@ -7,8 +7,9 @@ final List<chat> initialData = [
   chat('Hello', 'Alex', 'Hailey', false),
   chat('I like Fishin', 'Hailey', 'Alex', true),
   chat('OMG me too! I like fishin and huntin! JACOB BIEHL', 'Alex', 'Hailey', false),
+  chat('JACOB BIEHL', 'Jacob', 'Hailey', false),
 ];
-final List<String> allNames = ["Alex"];
+final List<String> allNames = ["Alex", "Jacob"];
 
 class ChatViewModel with ChangeNotifier {
   // All chats (that will be displayed on the Home screen)
@@ -37,7 +38,9 @@ class ChatViewModel with ChangeNotifier {
 
   // Send a chat
   void sendChat(chat message) {
-      _chats.add(message);
+      // Get name index
+      int index = _names.indexOf(message.receiverName);
+      _byName[index].add(message);
       notifyListeners();
   }
 
