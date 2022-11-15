@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:face2face/chat.dart';
 import 'package:face2face/swipe.dart';
 import 'package:flutter/material.dart';
+import 'palette.dart' as theme;
 
 import 'camera.dart';
 
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'face2face',
-      theme: ThemeData(primarySwatch: Colors.red),
+      color: theme.Palette.grape[500],
+      theme: theme.defaultTheme,
       darkTheme: ThemeData(brightness: Brightness.dark),
       home: MyHomePage(cameras: _cameras),
     );
@@ -49,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       return BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
+        backgroundColor: theme.Palette.orange[400],
         onTap: (int index) {
           setState(() => _currentIndex = index);
         },
@@ -72,7 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // App bar for our application, should be the same on each screen
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
-        backgroundColor: Colors.transparent,
+        // TODO: stop content from floating behind appbar
+        backgroundColor: theme.Palette.mauve[200],
         title: Text('${pages[_currentIndex]}'),
         leading: IconButton(
           alignment: Alignment.centerLeft,
