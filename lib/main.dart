@@ -4,20 +4,17 @@ import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:face2face/views/main_view.dart';
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-=======
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:form_validator/form_validator.dart';
+//import 'package:form_validator/form_validator.dart';
 import 'dart:async';
 import 'package:path/path.dart';
->>>>>>> Stashed changes
 
 // TODO:  do this better
 late List<CameraDescription> _cameras;
