@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 late List<CameraDescription> _cameras;
@@ -20,7 +21,7 @@ class _CameraState extends State<CameraPage> {
   @override
   void initState() {
     if (_cameras.isNotEmpty) {
-      controller = CameraController(_cameras.first, ResolutionPreset.veryHigh);
+      controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
 
       controller.initialize().then((_) {
         if (!mounted) {
@@ -59,9 +60,26 @@ class _CameraState extends State<CameraPage> {
     // This method is specific to the camera
     Widget _buildCameraPreview() {
       if (cameraInitialized == true && controller.value.isInitialized) {
-        return AspectRatio(
-          aspectRatio: controller.value.aspectRatio * 0.28,
-          child: CameraPreview(controller),
+        return Stack(
+          children: [
+            CameraPreview(controller),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+                color: Colors.black,
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  takePicture(controller);
+                },
+                child: const Text('Take Picture'),
+              ),
+            ),
+          ],
         );
       } else {
         return const Center(

@@ -1,9 +1,9 @@
 import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user_model.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
+User? _user = FirebaseAuth.instance.currentUser;
 
 void authenticateAccount() async {
   try {
@@ -26,11 +26,12 @@ void authenticateAccount() async {
       print('User is currently signed out!');
     } else {
       print('User is signed in!');
+      _user = user;
     }
   });
   upsertUser(
       UserAccount(
-        uniqueKey: 'test',
+        uniqueKey: getCurrentUser()!.uid,
         photos: <Photo>[
           Photo(
             id: 'test',
@@ -45,4 +46,8 @@ void authenticateAccount() async {
         pronouns: 'He/Him',
         age: 20,
       ));
+}
+
+getCurrentUser() {
+  return _user;
 }

@@ -1,9 +1,16 @@
-// This would actually be populated from the database
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:camera/camera.dart';
 import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:face2face/view_models/authentication_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final List<UserAccount> users = [];
+final storage = FirebaseStorage.instance;
 
 Future<void> populateUsers() async {
   final QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -11,6 +18,12 @@ Future<void> populateUsers() async {
   for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
     users.add(UserAccount.fromJson(document.data()));
   }
+}
+
+UserAccount getAccountUser() {
+  var user = getCurrentUser();
+
+  return users.firstWhere((element) => element.uniqueKey == user!.uid);
 }
 
 UserAccount getUser(String uid) {
@@ -26,11 +39,22 @@ Future<void> upsertUser(UserAccount user) async {
   .onError((error, stackTrace) => print(stackTrace));
 }
 
-Future<void> addPhoto(UserAccount user, Photo photo) async {
+Future<void> createPhoto(Uint8List file) async {
+  final user = getAccountUser();
+  final uid = user.uniqueKey.toString();
+  final ref = storage.ref().child('photos/$uid-${DateTime.now()}.jpeg');
+
+  await ref.putData(file, SettableMetadata(contentType: 'image/jpeg', customMetadata: {'name': 'photo'})).then((photo) {
+    addPhoto(user, photo);
+  });
+}
+
+Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
+
   if (user.photos?.isEmpty ?? true) {
-    user.photos![0] = photo;
+    user.photos![0] = Photo(url: photo.ref.fullPath, createdAt: DateTime.now().toString(), id: photo.ref.name);
   } else {
-    user.photos!.insert(0, photo);
+    user.photos!.insert(0, Photo(url: photo.ref.fullPath, createdAt: DateTime.now().toString(), id: photo.ref.name));
   }
   upsertUser(user);
 }
