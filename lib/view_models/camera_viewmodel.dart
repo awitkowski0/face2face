@@ -8,6 +8,4 @@ Future<void> takePicture(CameraController cameraController) async {
   await cameraController.takePicture().then((photo) async {
     await photo.readAsBytes().then((value) => createPhoto(value));
   });
-
-
 }

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:camera/camera.dart';
 import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -50,11 +49,12 @@ Future<void> createPhoto(Uint8List file) async {
 }
 
 Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
+  final url = await photo.ref.getDownloadURL();
 
   if (user.photos?.isEmpty ?? true) {
-    user.photos![0] = Photo(url: photo.ref.fullPath, createdAt: DateTime.now().toString(), id: photo.ref.name);
+    user.photos![0] = Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name);
   } else {
-    user.photos!.insert(0, Photo(url: photo.ref.fullPath, createdAt: DateTime.now().toString(), id: photo.ref.name));
+    user.photos!.insert(0, Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name));
   }
   upsertUser(user);
 }
