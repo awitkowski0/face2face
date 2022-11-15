@@ -3,7 +3,7 @@ import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
 import '../models/user_model.dart';
-import '../models/users_model.dart';
+import '../view_models/users_viewmodel.dart';
 
 class SwipePage extends StatefulWidget {
   const SwipePage({Key? key, this.title}) : super(key: key);
@@ -21,7 +21,7 @@ class _SwipePage extends State<SwipePage> {
 
   @override
   void initState() {
-    for (User user in users) {
+    for (UserAccount user in users) {
       _swipeItems.add(SwipeItem(
           content: user,
           likeAction: () {
