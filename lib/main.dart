@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-import 'package:face2face/view_models/chat_view_model.dart';
+import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:face2face/views/main_view.dart';

@@ -1,4 +1,4 @@
-import 'package:face2face/view_models/chat_view_model.dart';
+import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:face2face/palette.dart';
