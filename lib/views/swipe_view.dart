@@ -49,7 +49,6 @@ class _SwipePage extends State<SwipePage> {
                 //return Image(image: MemoryImage(getUserPhoto(_swipeItems[index].content)));
                 print(_swipeItems[index].content.photos[0].url);
                 return Image.network(_swipeItems[index].content.photos[0].url + 'jpeg');
-                return Image(image: NetworkImage(_swipeItems[index].content.photos[0].url + '.jpeg'), );
               },
               onStackFinished: () {},
               itemChanged: (SwipeItem item, int index) {
