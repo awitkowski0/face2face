@@ -6,10 +6,10 @@ import '../models/chat.dart';
 final List<chat> initialData = [
   chat('Hello', 'Alex', 'Hailey', false),
   chat('I like Fishin', 'Hailey', 'Alex', true),
-  chat('OMG me too! I like fishin and huntin! JACOB BIEHL', 'Alex', 'Hailey', false),
-  chat('JACOB BIEHL', 'Jacob', 'Hailey', false),
+  chat('OMG me too! I like fishin and huntin!', 'Alex', 'Hailey', false),
+  chat('Hey this is Matt', 'Matt', 'Hailey', false),
 ];
-final List<String> allNames = ["Alex", "Jacob"];
+final List<String> allNames = ["Alex", "Matt"];
 
 class ChatViewModel with ChangeNotifier {
   // All chats (that will be displayed on the Home screen)

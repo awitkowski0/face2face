@@ -37,7 +37,7 @@ class _ChatState extends State<ChatPage> {
 
     Color? getColor(bool sentByMe){
       if(sentByMe)
-        return Palette.orange[300];
+        return Palette.orchid[100];
       else
         return Colors.white;
     }
@@ -68,6 +68,7 @@ class _ChatState extends State<ChatPage> {
     Widget _buildChat() {
       if(_page == 0) {
         return Container(
+            color: Palette.mauve[50],
             width: MediaQuery
                 .of(context)
                 .size
@@ -85,7 +86,7 @@ class _ChatState extends State<ChatPage> {
                               color: Color(0xFF606060)
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Palette.mauve[100]
+                          color: Palette.orchid[100]
                       ),
                       width: MediaQuery
                           .of(context)
@@ -132,7 +133,7 @@ class _ChatState extends State<ChatPage> {
         return Column(
             children: [
               Container(
-                  color: Palette.orchid[50],
+                  color: Palette.mauve[50],
                   width: MediaQuery
                       .of(context)
                       .size
@@ -161,7 +162,7 @@ class _ChatState extends State<ChatPage> {
               Expanded(
                   flex: 5,
                   child: Container(
-                      color: Palette.orchid[50],
+                      color: Palette.mauve[50],
                       child: ListView.builder(
                         itemCount: allMsg[_userIndex].length,
                         itemBuilder: (BuildContext context, int index) {
@@ -175,25 +176,32 @@ class _ChatState extends State<ChatPage> {
               Container(
                   child: Form(
                     key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        TextFormField(
-                          controller: messageController,
-                          decoration: const InputDecoration(
-                            hintText: 'Message',
-                          ),
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
+                        Padding(padding: EdgeInsets.only(left:20)),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width - 100,
+                          child: TextFormField(
+                            controller: messageController,
+                            decoration: const InputDecoration(
+                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid)),
+                              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid, width: 2)),
+                              suffixIconColor: Palette.pink,
+                              hintText: 'Message',
+                            ),
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter some text';
+                              }
+                              return null;
+                            },
+                          )
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: ElevatedButton(
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.grape[500])),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
                             onPressed: () {
                               context.read<ChatViewModel>().sendChat(chat(messageController.text,"Hailey",names[_userIndex],true));
                               messageController.text = "";
