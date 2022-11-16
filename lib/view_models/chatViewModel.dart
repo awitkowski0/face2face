@@ -7,9 +7,11 @@ final List<chat> initialData = [
   chat('Hello', 'Alex', 'Hailey', false),
   chat('I like Fishin', 'Hailey', 'Alex', true),
   chat('OMG me too! I like fishin and huntin!', 'Alex', 'Hailey', false),
-  chat('Hey this is Matt', 'Matt', 'Hailey', false),
+  chat('Alex is going to be late to class', 'Matt', 'Hailey', false),
+  chat('At least he\'s coming to class this time', 'Hailey', 'Matt', true),
+  chat('Don\'t forget to do your homework', 'Jacob', 'Hailey', false),
 ];
-final List<String> allNames = ["Alex", "Matt"];
+final List<String> allNames = ["Alex", "Matt", "Jacob"];
 
 class ChatViewModel with ChangeNotifier {
   // All chats (that will be displayed on the Home screen)

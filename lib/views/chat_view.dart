@@ -55,10 +55,10 @@ class _ChatState extends State<ChatPage> {
           children: [
             Text("${message.senderName}"),
             Container(
-                constraints: BoxConstraints(maxWidth: 200),
+                constraints: BoxConstraints(maxWidth: 250),
                 decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(message.sentByMe)),
                 padding: EdgeInsets.all(10),
-                child: Text("${message.message}")
+                child: Text("${message.message}", style: TextStyle(fontSize: 20),)
             )
           ]
       );
@@ -102,7 +102,6 @@ class _ChatState extends State<ChatPage> {
                               });
                             },
                                 icon: const Icon(Icons.chat_bubble_outline)),
-                            Image.asset('assets/images/face2face.png'),
                             Padding(padding: EdgeInsets.only(left: 8)),
                             Text("${allMsg[index][0].senderName}", style: TextStyle(
                                 fontSize: 20,
@@ -168,7 +167,7 @@ class _ChatState extends State<ChatPage> {
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
                             alignment: getAl(allMsg[_userIndex][index].sentByMe),
-                            child: displayMessage(allMsg[_userIndex][index]),
+                            child: Padding(child: displayMessage(allMsg[_userIndex][index]), padding: const EdgeInsets.only(left:10, right:10),),
                           );
                         },
                       )
@@ -183,6 +182,7 @@ class _ChatState extends State<ChatPage> {
                         SizedBox(
                           width: MediaQuery.of(context).size.width - 100,
                           child: TextFormField(
+                            cursorColor: Palette.orchid,
                             controller: messageController,
                             decoration: const InputDecoration(
                               enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid)),

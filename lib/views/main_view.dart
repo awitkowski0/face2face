@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget _buildNavigationBar() {
       return BottomNavigationBar(
         selectedItemColor: Palette.orchid,
-        backgroundColor: Palette.orange[100],
+        backgroundColor: Palette.orange[200],
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (int index) {
