@@ -16,6 +16,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePage extends State<SwipePage> {
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
+  final List<String> _photos = ["assets/images/profiles/chase0.jpeg", "assets/images/profiles/chris0.jpeg", "assets/images/profiles/james0.jpeg"];
   MatchEngine? _matchEngine;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -49,7 +50,7 @@ class _SwipePage extends State<SwipePage> {
                 return Container(
                   child:
                     Image(
-                      image: AssetImage(_swipeItems[index].content.images[0]),
+                      image: AssetImage("${_photos[index]}"),
                       fit: BoxFit.fitHeight,
                     ),
                     //Text(_swipeItems[index].content.displayName),
