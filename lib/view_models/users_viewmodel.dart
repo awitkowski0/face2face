@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:face2face/models/photos.dart';
-import 'package:face2face/models/user_model.dart';
+import 'package:face2face/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,6 +10,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 final List<UserAccount> users = [];
 final storage = FirebaseStorage.instance;
 
+/// Currently populates all users from DB
+/// Move to only populate "potential matches"
 Future<void> populateUsers() async {
   final QuerySnapshot<Map<String, dynamic>> querySnapshot =
       await FirebaseFirestore.instance.collection('users').get();
@@ -18,6 +20,7 @@ Future<void> populateUsers() async {
   }
 }
 
+// Get the current user
 UserAccount getAccountUser() {
   var user = getCurrentUser();
 
@@ -37,6 +40,7 @@ Future<void> upsertUser(UserAccount user) async {
   .onError((error, stackTrace) => print(stackTrace));
 }
 
+// Create a new photo for the user
 Future<void> createPhoto(Uint8List file) async {
   final user = getAccountUser();
   final uid = user.uniqueKey.toString();
@@ -47,6 +51,7 @@ Future<void> createPhoto(Uint8List file) async {
   });
 }
 
+// Add a photo to user.photos and update user
 Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
   final url = await photo.ref.getDownloadURL();
   user.photos!.insert(0, Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name));

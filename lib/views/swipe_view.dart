@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 
-import '../models/user_model.dart';
+import '../models/user.dart';
 import '../view_models/users_viewmodel.dart';
 
 class SwipePage extends StatefulWidget {

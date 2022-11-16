@@ -1,4 +1,4 @@
-import 'package:face2face/view_models/chatViewModel.dart';
+import 'package:face2face/view_models/chat_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:face2face/palette.dart';
@@ -22,8 +22,8 @@ class _ChatState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final List<String> names = context.watch<ChatViewModel>().names;
-    final List<List<chat>> allMsg = context.watch<ChatViewModel>().byName;
-    final List<chat> messages = context.watch<ChatViewModel>().getNamedchats("Alex");
+    final List<List<Chat>> allMsg = context.watch<ChatViewModel>().byName;
+    final List<Chat> messages = context.watch<ChatViewModel>().getNamedchats("Alex");
     //List<chat> getChatsPerUser() {
     //return messages.where((element) => element.senderName == _chatPerson).toList();
     //}
@@ -49,7 +49,7 @@ class _ChatState extends State<ChatPage> {
         return CrossAxisAlignment.start;
     }
 
-    Widget displayMessage(chat message){
+    Widget displayMessage(Chat message){
       return Column(
           crossAxisAlignment: getNameAl(message.sentByMe),
           children: [
@@ -203,7 +203,7 @@ class _ChatState extends State<ChatPage> {
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
                             onPressed: () {
-                              context.read<ChatViewModel>().sendChat(chat(messageController.text,"Hailey",names[_userIndex],true));
+                              context.read<ChatViewModel>().sendChat(Chat(messageController.text,"Hailey",names[_userIndex],true));
                               messageController.text = "";
                             },
                             child: const Text('Send'),

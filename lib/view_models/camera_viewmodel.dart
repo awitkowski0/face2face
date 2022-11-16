@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
-import 'package:face2face/models/user_model.dart';
+import 'package:face2face/models/user.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
