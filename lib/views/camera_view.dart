@@ -33,11 +33,11 @@ class _CameraState extends State<CameraPage> {
         if (e is CameraException) {
           switch (e.code) {
             case 'CameraAccessDenied':
-              // TODO: Kill the application.
+            // TODO: Kill the application.
               print('User denied camera access.');
               break;
             default:
-              // Crash the application.
+            // Crash the application.
               print('Handle other errors.');
               break;
           }
@@ -63,27 +63,19 @@ class _CameraState extends State<CameraPage> {
         return Stack(
           children: [
             CameraPreview(controller),
-            Positioned(
-              bottom: 0,
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: 100,
-                color: Colors.black,
-              ),
-            ),
-            Center(
-              child: ElevatedButton(
+            Align(
+              alignment: Alignment.center,
+              child: FloatingActionButton(
                 onPressed: () {
                   takePicture(controller);
                 },
-                child: const Text('Take Picture'),
+                child: const Icon(Icons.camera),
               ),
             ),
-          ],
-        );
+          ]);
       } else {
-        return const Center(
-            child: Text('No camera available for this device...'));
+      return const Center(
+        child: Text('No camera available for this device...'));
       }
     }
 

@@ -1,5 +1,4 @@
 import 'package:face2face/models/photos.dart';
-import 'package:face2face/models/user_model.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -29,23 +28,6 @@ void authenticateAccount() async {
       _user = user;
     }
   });
-  upsertUser(
-      UserAccount(
-        uniqueKey: getCurrentUser()!.uid,
-        photos: <Photo>[
-          Photo(
-            id: 'test',
-            url: 'https://picsum.photos/200/300',
-            createdAt: DateTime.now().toString(),
-          ),
-        ],
-        displayName: 'James',
-        shortBio: 'I like to fish',
-        major: 'Actuary Science',
-        occupation: 'Student',
-        pronouns: 'He/Him',
-        age: 20,
-      ));
 }
 
 getCurrentUser() {

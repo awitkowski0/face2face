@@ -47,14 +47,9 @@ class _SwipePage extends State<SwipePage> {
             child: SwipeCards(
               matchEngine: _matchEngine!,
               itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child:
-                    Image(
-                      image: AssetImage("${_photos[index]}"),
-                      fit: BoxFit.fitHeight,
-                    ),
-                    //Text(_swipeItems[index].content.displayName),
-                );
+                //return Image(image: MemoryImage(getUserPhoto(_swipeItems[index].content)));
+                print(_swipeItems[index].content.photos[0].url);
+                return Image.network(_swipeItems[index].content.photos[0].url + 'jpeg');
               },
               onStackFinished: () {},
               itemChanged: (SwipeItem item, int index) {
