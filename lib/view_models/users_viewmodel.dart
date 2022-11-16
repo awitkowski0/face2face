@@ -5,7 +5,6 @@ import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face2face/view_models/authentication_viewmodel.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 final List<UserAccount> users = [];
@@ -50,11 +49,7 @@ Future<void> createPhoto(Uint8List file) async {
 
 Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
   final url = await photo.ref.getDownloadURL();
+  user.photos!.insert(0, Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name));
 
-  if (user.photos?.isEmpty ?? true) {
-    user.photos![0] = Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name);
-  } else {
-    user.photos!.insert(0, Photo(url: url, createdAt: DateTime.now().toString(), id: photo.ref.name));
-  }
   upsertUser(user);
 }
