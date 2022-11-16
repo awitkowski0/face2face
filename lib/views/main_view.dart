@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'camera_view.dart';
 import 'chat_view.dart';
+import 'package:face2face/palette.dart';
 
 late List<CameraDescription> _cameras;
 
@@ -26,6 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // Our navigation bar, should be universal for all pages
     Widget _buildNavigationBar() {
       return BottomNavigationBar(
+        selectedItemColor: Palette.orchid,
+        backgroundColor: Palette.orange[200],
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (int index) {
