@@ -15,53 +15,34 @@ class ChatPage extends StatefulWidget {
 class _ChatState extends State<ChatPage> {
   int _page = 0;
   int _userIndex = 0;
+  int _userLoggedIn = 0;
   String _chatPerson = "";
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final List<String> names = context.watch<ChatViewModel>().names;
-    final List<List<Chat>> allMsg = context.watch<ChatViewModel>().byName;
-    final List<Chat> messages = context.watch<ChatViewModel>().getNamedchats("Alex");
-    //List<chat> getChatsPerUser() {
-    //return messages.where((element) => element.senderName == _chatPerson).toList();
-    //}
+    final List<Chat> allMsg = context.watch<ChatViewModel>().chats;
 
-    AlignmentGeometry getAl(bool sentByMe){
-      if(sentByMe)
+    AlignmentGeometry getAl(int sender){
+      if(sender == _userLoggedIn)
         return Alignment.centerRight;
       else
         return Alignment.centerLeft;
     }
 
-    Color? getColor(bool sentByMe){
-      if(sentByMe)
+    Color? getColor(int sender){
+      if(sender == _userLoggedIn)
         return Palette.orchid[100];
       else
         return Colors.white;
     }
 
-    CrossAxisAlignment getNameAl(bool sentByMe){
-      if(sentByMe)
+    CrossAxisAlignment getNameAl(int id){
+      if(id == _userLoggedIn)
         return CrossAxisAlignment.end;
       else
         return CrossAxisAlignment.start;
-    }
-
-    Widget displayMessage(Chat message){
-      return Column(
-          crossAxisAlignment: getNameAl(message.sentByMe),
-          children: [
-            Text("${message.senderName}"),
-            Container(
-                constraints: BoxConstraints(maxWidth: 250),
-                decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(message.sentByMe)),
-                padding: EdgeInsets.all(10),
-                child: Text("${message.message}", style: TextStyle(fontSize: 20),)
-            )
-          ]
-      );
     }
 
     // This method builds the chat
@@ -103,7 +84,7 @@ class _ChatState extends State<ChatPage> {
                             },
                                 icon: const Icon(Icons.chat_bubble_outline)),
                             Padding(padding: EdgeInsets.only(left: 8)),
-                            Text("${allMsg[index][0].senderName}", style: TextStyle(
+                            Text("${allMsg[index].user2Name}", style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "Roboto",
                                 color: Color(0xFF000000))),
@@ -111,7 +92,7 @@ class _ChatState extends State<ChatPage> {
                             Flexible(
                               child: Align(
                                   alignment: Alignment.centerRight,
-                                  child: Text("${allMsg[index][allMsg[index].length-1].message}",
+                                  child: Text("${allMsg[index].messages[allMsg[index].messages.length-1].message}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 15,
@@ -147,7 +128,7 @@ class _ChatState extends State<ChatPage> {
                         },
                             icon: const Icon(Icons.arrow_back, color: Color(0xFF000000),)),
                         Text(
-                          "${names[_userIndex]}",
+                          "${allMsg[_userIndex].user2Name}",
                           style: TextStyle(
                               fontSize: 20,
                               color: Color(0xFF000000)
@@ -163,11 +144,24 @@ class _ChatState extends State<ChatPage> {
                   child: Container(
                       color: Palette.mauve[50],
                       child: ListView.builder(
-                        itemCount: allMsg[_userIndex].length,
+                        itemCount: allMsg[_userIndex].messages.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
-                            alignment: getAl(allMsg[_userIndex][index].sentByMe),
-                            child: Padding(child: displayMessage(allMsg[_userIndex][index]), padding: const EdgeInsets.only(left:10, right:10),),
+                            alignment: getAl(allMsg[_userIndex].messages[index].senderID),
+                            child: Padding(
+                              child: Column(
+                                  crossAxisAlignment: getNameAl(allMsg[_userIndex].messages[index].senderID),
+                                  children: [
+                                    Text("${allMsg[_userIndex].messages[index].senderID}"),
+                                    Container(
+                                        constraints: BoxConstraints(maxWidth: 250),
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(allMsg[_userIndex].messages[index].senderID)),
+                                        padding: EdgeInsets.all(10),
+                                        child: Text("${allMsg[_userIndex].messages[index].message}", style: TextStyle(fontSize: 20),)
+                                    )
+                                  ]
+                              ),
+                              padding: const EdgeInsets.only(left:10, right:10),),
                           );
                         },
                       )
@@ -203,7 +197,7 @@ class _ChatState extends State<ChatPage> {
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
                             onPressed: () {
-                              context.read<ChatViewModel>().sendChat(Chat(messageController.text,"Hailey",names[_userIndex],true));
+                              context.read<ChatViewModel>().sendChat(Message(0, _userIndex, messageController.text, DateTime.now()));
                               messageController.text = "";
                             },
                             child: const Text('Send'),

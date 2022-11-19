@@ -4,12 +4,7 @@ import '../models/chat.dart';
 
 // A list of movies
 final List<Chat> initialData = [
-  Chat('Hello', 'Alex', 'Hailey', false),
-  Chat('I like Fishin', 'Hailey', 'Alex', true),
-  Chat('OMG me too! I like fishin and huntin!', 'Alex', 'Hailey', false),
-  Chat('Alex is going to be late to class', 'Matt', 'Hailey', false),
-  Chat('At least he\'s coming to class this time', 'Hailey', 'Matt', true),
-  Chat('Don\'t forget to do your homework', 'Jacob', 'Hailey', false),
+  Chat([Message(1, 0, "Hello", DateTime(2022)), Message(0, 1, "I like fishin", DateTime(2022))], 'Hailey', 'Alex'),
 ];
 final List<String> allNames = ["Alex", "Matt", "Jacob"];
 
@@ -20,12 +15,12 @@ class ChatViewModel with ChangeNotifier {
 
   List<String> get names => _names;
 
-  List<List<Chat>> _byName = [];
+  //List<List<Chat>> _byName = [];
 
   // Retrieve all chats
   List<Chat> get chats => _chats;
 
-  List<List<Chat>> get byName {
+  /*List<List<Chat>> get byName {
     if(_byName.length == 0) {
       for (var name in names) {
         _byName.add(getNamedchats(name));
@@ -35,14 +30,13 @@ class ChatViewModel with ChangeNotifier {
   }
   
   List<Chat> getNamedchats(String name){
-    return _chats.where((element) => element.senderName == name || element.receiverName == name).toList();
-  }
+    return _chats.where((element) => element.user1Name == name || element.user2Name == name).toList();
+  }*/
 
   // Send a chat
-  void sendChat(Chat message) {
+  void sendChat(Message message) {
       // Get name index
-      int index = _names.indexOf(message.receiverName);
-      _byName[index].add(message);
+      _chats[message.receiverID].messages.add(message);
       notifyListeners();
   }
 
