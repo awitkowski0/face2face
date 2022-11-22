@@ -21,7 +21,8 @@ void main() async {
   ).then((value) =>
   {
     authenticateAccount(),
-    populateUsers()
+    populateUsers(),
+    populateChat(),
   });
 
   _cameras = await availableCameras();

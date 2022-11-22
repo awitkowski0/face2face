@@ -92,7 +92,7 @@ class _ChatState extends State<ChatPage> {
                             Flexible(
                               child: Align(
                                   alignment: Alignment.centerRight,
-                                  child: Text("${allMsg[index].messages[allMsg[index].messages.length-1].message}",
+                                  child: Text("${allMsg[index].messages![allMsg[index].messages!.length-1].message}",
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 15,
@@ -144,20 +144,20 @@ class _ChatState extends State<ChatPage> {
                   child: Container(
                       color: Palette.mauve[50],
                       child: ListView.builder(
-                        itemCount: allMsg[_userIndex].messages.length,
+                        itemCount: allMsg[_userIndex].messages!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
-                            alignment: getAl(allMsg[_userIndex].messages[index].senderID),
+                            alignment: getAl(allMsg[_userIndex].messages![index].senderID),
                             child: Padding(
                               child: Column(
-                                  crossAxisAlignment: getNameAl(allMsg[_userIndex].messages[index].senderID),
+                                  crossAxisAlignment: getNameAl(allMsg[_userIndex].messages![index].senderID),
                                   children: [
-                                    Text("${allMsg[_userIndex].messages[index].senderID}"),
+                                    Text("${allMsg[_userIndex].messages![index].senderID}"),
                                     Container(
                                         constraints: BoxConstraints(maxWidth: 250),
-                                        decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(allMsg[_userIndex].messages[index].senderID)),
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(allMsg[_userIndex].messages![index].senderID)),
                                         padding: EdgeInsets.all(10),
-                                        child: Text("${allMsg[_userIndex].messages[index].message}", style: TextStyle(fontSize: 20),)
+                                        child: Text("${allMsg[_userIndex].messages![index].message}", style: TextStyle(fontSize: 20),)
                                     )
                                   ]
                               ),
@@ -197,7 +197,7 @@ class _ChatState extends State<ChatPage> {
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
                             onPressed: () {
-                              context.read<ChatViewModel>().sendChat(Message(0, _userIndex, messageController.text, DateTime.now()));
+                              context.read<ChatViewModel>().sendChat(Message(_userLoggedIn, _userIndex, messageController.text, DateTime.now()), _userIndex);
                               messageController.text = "";
                             },
                             child: const Text('Send'),
