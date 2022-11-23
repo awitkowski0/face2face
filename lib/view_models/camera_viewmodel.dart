@@ -1,28 +1,51 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:camera/camera.dart';
-import 'package:face2face/models/user.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
-Future<void> takePicture(CameraController cameraController) async {
-  await cameraController.takePicture().then((photo) async {
-    await photo.readAsBytes().then((value) => createPhoto(value));
-  });
-}
+class CameraViewModel extends ChangeNotifier {
+  late List<CameraDescription> _cameras;
+  late CameraController _controller;
+  late bool isInitialized = false;
 
-Uint8List getUserPhoto(UserAccount userAccount) {
-  final photo = userAccount.photos?.first;
-  final storageRef = FirebaseStorage.instance.ref();
-  final photoRef = storageRef.child("images/{$photo?.id}");
-
-  try {
-    photoRef.getData().then((value) {
-      return value;
-    });
-  } on FirebaseException catch (e) {
-    // Handle any errors.
+  void onChange() {
+    notifyListeners();
   }
-  return Uint8List(0);
+
+  // Initialize cameras and camera controller
+  Future<void> init() async {
+    _cameras = await availableCameras();
+
+    if (_cameras.isNotEmpty) {
+      _controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
+
+      _controller.initialize().then((_) {
+        isInitialized = true;
+
+        return;
+      }).catchError((Object e) {
+        if (e is CameraException) {
+          switch (e.code) {
+            case 'CameraAccessDenied':
+            // TODO: Kill the application.
+              print('User denied camera access.');
+              break;
+            default:
+            // Crash the application.
+              print('Handle other errors.');
+              break;
+          }
+        }
+      });
+    } else {
+      print('No cameras available.');
+    }
+  }
+
+  // Take a picture
+  Future<void> takePicture() async {
+    await _controller.takePicture().then((photo) async {
+      await photo.readAsBytes().then((value) => createPhoto(value));
+    });
+  }
+  CameraController get controller => _controller;
 }

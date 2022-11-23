@@ -1,4 +1,4 @@
-import 'package:camera/camera.dart';
+import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
@@ -8,28 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-import 'package:flutter/cupertino.dart';
-
-// TODO:  do this better
-late List<CameraDescription> _cameras;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ).then((value) =>
-  {
-    authenticateAccount(),
-    populateUsers(),
-    populateChat(),
-  });
-
-  _cameras = await availableCameras();
-  runApp(ChangeNotifierProvider<ChatViewModel>(
-    child: const MyApp(),
-    create: (_) => ChatViewModel(), // Create a new ChangeNotifier object
-  ));
+  ).then((_) => {
+        authenticateAccount(),
+        populateUsers(),
+        populateChat(),
+      });
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -38,12 +27,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-      return MaterialApp(
-        title: 'face2face',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-        ),
-        home: MyHomePage(cameras: _cameras),
-      );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ChatViewModel()),
+          ListenableProvider(create: (_) => CameraViewModel()),
+        ],
+        child: MaterialApp(
+          title: 'face2face',
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+          ),
+          home: const MyHomePage(),
+        ));
   }
 }
