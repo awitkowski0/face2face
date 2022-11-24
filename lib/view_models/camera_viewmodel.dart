@@ -4,24 +4,19 @@ import 'package:flutter/cupertino.dart';
 
 class CameraViewModel extends ChangeNotifier {
   late List<CameraDescription> _cameras;
-  late CameraController _controller;
+  late CameraController controller;
   late bool isInitialized = false;
-
-  void onChange() {
-    notifyListeners();
-  }
 
   // Initialize cameras and camera controller
   Future<void> init() async {
     _cameras = await availableCameras();
 
     if (_cameras.isNotEmpty) {
-      _controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
+      controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
 
-      _controller.initialize().then((_) {
+      controller.initialize().then((_) {
         isInitialized = true;
-
-        return;
+        notifyListeners();
       }).catchError((Object e) {
         if (e is CameraException) {
           switch (e.code) {
@@ -43,9 +38,8 @@ class CameraViewModel extends ChangeNotifier {
 
   // Take a picture
   Future<void> takePicture() async {
-    await _controller.takePicture().then((photo) async {
+    await controller.takePicture().then((photo) async {
       await photo.readAsBytes().then((value) => createPhoto(value));
     });
   }
-  CameraController get controller => _controller;
 }

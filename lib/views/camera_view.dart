@@ -13,9 +13,12 @@ class CameraPage extends StatefulWidget {
 class _CameraState extends State<CameraPage> {
   late bool isInit = false;
   late CameraController cameraController;
+  late CameraViewModel viewModel;
 
   @override
   void initState() {
+    viewModel = Provider.of<CameraViewModel>(context, listen: false);
+    viewModel.init();
     super.initState();
   }
 
@@ -28,29 +31,27 @@ class _CameraState extends State<CameraPage> {
   Widget build(BuildContext context) {
     // This method is specific to the camera
     Widget buildCameraPreview() {
-      // crashin
-
-      context.watch<CameraViewModel>().init().then((value) {
-        isInit =
-            Provider.of<CameraViewModel>(context, listen: false).isInitialized;
-        cameraController =
-            Provider.of<CameraViewModel>(context, listen: false).controller;
-        if (isInit && cameraController.value.isInitialized) {
-          return Stack(children: [
-            // Camera preview requires a controller
-            CameraPreview(cameraController),
-            Align(
-              alignment: Alignment.center,
-              child: FloatingActionButton(
-                onPressed: () {
-                  context.read<CameraViewModel>().takePicture();
-                },
-                child: const Icon(Icons.camera),
-              ),
+      isInit =
+          Provider.of<CameraViewModel>(context, listen: false).isInitialized;
+      cameraController =
+          Provider.of<CameraViewModel>(context, listen: false).controller;
+      if (isInit && cameraController.value.isInitialized) {
+        return Stack(children: [
+          // Camera preview requires a controller
+          CameraPreview(cameraController),
+          Align(
+            alignment: Alignment.center,
+            child: FloatingActionButton(
+              onPressed: () {
+                context.read<CameraViewModel>().takePicture();
+              },
+              child: const Icon(Icons.camera),
             ),
-          ]);
-        }
-      });
+          ),
+        ]);
+      } else {
+        return const Center(child: CircularProgressIndicator());
+      }
     }
     return buildCameraPreview();
   }
