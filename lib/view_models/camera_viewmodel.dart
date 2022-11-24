@@ -11,7 +11,7 @@ class CameraViewModel extends ChangeNotifier {
   Future<void> init() async {
     _cameras = await availableCameras();
 
-    if (_cameras.isNotEmpty) {
+    if (_cameras.isNotEmpty && !isInitialized) {
       controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
 
       controller.initialize().then((_) {

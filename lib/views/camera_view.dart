@@ -18,7 +18,9 @@ class _CameraState extends State<CameraPage> {
   @override
   void initState() {
     viewModel = Provider.of<CameraViewModel>(context, listen: false);
-    viewModel.init();
+
+    if (!isInit) viewModel.init();
+
     super.initState();
   }
 
@@ -31,11 +33,15 @@ class _CameraState extends State<CameraPage> {
   Widget build(BuildContext context) {
     // This method is specific to the camera
     Widget buildCameraPreview() {
-      isInit =
-          Provider.of<CameraViewModel>(context, listen: false).isInitialized;
-      cameraController =
-          Provider.of<CameraViewModel>(context, listen: false).controller;
+      isInit = Provider.of<CameraViewModel>(context, listen: true).isInitialized;
+      if (isInit) {
+        cameraController =
+            Provider.of<CameraViewModel>(context, listen: false).controller;
+      }
+
       if (isInit && cameraController.value.isInitialized) {
+        print('Camera is initialized');
+
         return Stack(children: [
           // Camera preview requires a controller
           CameraPreview(cameraController),
@@ -53,6 +59,7 @@ class _CameraState extends State<CameraPage> {
         return const Center(child: CircularProgressIndicator());
       }
     }
+
     return buildCameraPreview();
   }
 }
