@@ -1,3 +1,4 @@
+import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (_) => AuthenticationViewModel()),
           ChangeNotifierProvider(create: (_) => AccountViewModel()),
           ChangeNotifierProvider(create: (_) => ChatViewModel()),
           ChangeNotifierProvider(create: (_) => CameraViewModel()),

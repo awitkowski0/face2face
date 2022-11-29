@@ -1,5 +1,5 @@
 import 'package:face2face/view_models/accounts_viewmodel.dart';
-import 'package:face2face/views/registration_page_view.dart';
+import 'package:face2face/views/authentication_view.dart';
 import 'package:face2face/views/swipe_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
           bottomNavigationBar: buildNavigationBar(),
         );
       } else {
-        return const RegistrationPage();
+        return const AuthenticationPage();
       }
     } else {
       return Scaffold(body: buildProgressIndicator());

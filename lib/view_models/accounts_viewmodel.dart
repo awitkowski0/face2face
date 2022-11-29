@@ -3,14 +3,12 @@ import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/user.dart';
 
 class AccountViewModel extends ChangeNotifier {
   final List<UserAccount> users = [];
   final _auth = FirebaseStorage.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
   User? _currentUser = FirebaseAuth.instance.currentUser;
 
   bool get isInitialized => (_auth.bucket.isNotEmpty);
