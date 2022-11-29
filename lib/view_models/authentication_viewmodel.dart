@@ -1,4 +1,3 @@
-import 'package:face2face/models/photos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 User? _user = FirebaseAuth.instance.currentUser;
