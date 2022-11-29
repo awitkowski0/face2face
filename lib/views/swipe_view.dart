@@ -48,7 +48,6 @@ class _SwipePage extends State<SwipePage> {
               matchEngine: _matchEngine!,
               itemBuilder: (BuildContext context, int index) {
                 //return Image(image: MemoryImage(getUserPhoto(_swipeItems[index].content)));
-                print(_swipeItems[index].content.photos[0].url);
                 return Image.network(_swipeItems[index].content.photos[0].url + 'jpeg');
               },
               onStackFinished: () {},
