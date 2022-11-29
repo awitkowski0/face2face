@@ -16,9 +16,11 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePage extends State<SwipePage> {
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
-  final List<String> _photos = ["assets/images/profiles/chase0.jpeg", "assets/images/profiles/chris0.jpeg", "assets/images/profiles/james0.jpeg"];
+  final List<String> _names = <String>["Jacob", "Chris"];
+  final List<String> _photos = <String>['assets/images/profiles/chase0.jpeg', 'assets/images/profiles/james0.jpeg'];
   MatchEngine? _matchEngine;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
 
   @override
   void initState() {
@@ -47,9 +49,71 @@ class _SwipePage extends State<SwipePage> {
             child: SwipeCards(
               matchEngine: _matchEngine!,
               itemBuilder: (BuildContext context, int index) {
-                //return Image(image: MemoryImage(getUserPhoto(_swipeItems[index].content)));
-                print(_swipeItems[index].content.photos[0].url);
-                return Image.network(_swipeItems[index].content.photos[0].url + 'jpeg');
+                return Container(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image(
+                            image: AssetImage(_photos[index]),
+                            fit: BoxFit.fitHeight,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          height: 80,
+                          width: 340,
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            shadows: <BoxShadow>[
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _names[index],
+                                  style: const TextStyle(
+                                    fontFamily: 'Nunito',
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 21,
+                                  ),
+                                ),
+                                Text(
+                                  "Age",
+                                  // UserAccount.age,
+                                  style: TextStyle(
+                                    fontFamily: 'Nunito',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    // Image(
+                    //  image: AssetImage(_swipeItems[index].content.images[0]),
+                    //  fit: BoxFit.fitHeight,
+                    // ),
+                    //Text(_swipeItems[index].content.displayName),
+                  ])
+                );
               },
               onStackFinished: () {},
               itemChanged: (SwipeItem item, int index) {
