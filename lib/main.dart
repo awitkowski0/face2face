@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => ChatViewModel()),
-          ListenableProvider(create: (_) => CameraViewModel()),
+          ChangeNotifierProvider(create: (_) => CameraViewModel()),
         ],
         child: MaterialApp(
           title: 'face2face',

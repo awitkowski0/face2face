@@ -40,12 +40,13 @@ class _CameraState extends State<CameraPage> {
       }
 
       if (isInit && cameraController.value.isInitialized) {
-        print('Camera is initialized');
+        cameraController.setFlashMode(FlashMode.always);
+        cameraController.setFocusMode(FocusMode.auto);
+        cameraController.setZoomLevel(0.5);
 
         return Stack(children: [
           // Camera preview requires a controller
-          CameraPreview(cameraController),
-          Align(
+          CameraPreview(cameraController, child: Align(
             alignment: Alignment.center,
             child: FloatingActionButton(
               onPressed: () {
@@ -53,7 +54,7 @@ class _CameraState extends State<CameraPage> {
               },
               child: const Icon(Icons.camera),
             ),
-          ),
+          )),
         ]);
       } else {
         return const Center(child: CircularProgressIndicator());
@@ -61,5 +62,20 @@ class _CameraState extends State<CameraPage> {
     }
 
     return buildCameraPreview();
+  }
+}
+
+
+/// Returns a suitable camera icon for [direction].
+IconData getCameraLensIcon(CameraLensDirection direction) {
+  switch (direction) {
+    case CameraLensDirection.back:
+      return Icons.camera_rear;
+    case CameraLensDirection.front:
+      return Icons.camera_front;
+    case CameraLensDirection.external:
+      return Icons.camera;
+    default:
+      throw ArgumentError('Unknown lens direction');
   }
 }

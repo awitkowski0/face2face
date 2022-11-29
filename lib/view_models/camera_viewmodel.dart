@@ -21,11 +21,11 @@ class CameraViewModel extends ChangeNotifier {
         if (e is CameraException) {
           switch (e.code) {
             case 'CameraAccessDenied':
-            // TODO: Kill the application.
+              // TODO: Kill the application.
               print('User denied camera access.');
               break;
             default:
-            // Crash the application.
+              // Crash the application.
               print('Handle other errors.');
               break;
           }
