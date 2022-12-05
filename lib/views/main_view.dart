@@ -1,5 +1,3 @@
-
-import 'package:camera/camera.dart';
 import 'package:face2face/views/swipe_view.dart';
 import 'package:flutter/material.dart';
 
@@ -7,12 +5,8 @@ import 'camera_view.dart';
 import 'chat_view.dart';
 import 'package:face2face/palette.dart';
 
-late List<CameraDescription> _cameras;
-
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required List<CameraDescription> cameras}) : super(key: key) {
-    _cameras = cameras;
-  }
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -25,7 +19,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // Our navigation bar, should be universal for all pages
-    Widget _buildNavigationBar() {
+    Widget buildNavigationBar() {
       return BottomNavigationBar(
         selectedItemColor: Palette.orchid,
         backgroundColor: Palette.orange[200],
@@ -52,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // App bar for our application, should be the same on each screen
-    PreferredSizeWidget _buildAppBar() {
+    PreferredSizeWidget buildAppBar() {
       return AppBar(
         backgroundColor: Colors.transparent,
         title: Text(pages[_currentIndex]),
@@ -71,14 +65,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // Our body, should be different for each page
-    Widget _buildBody() {
+    Widget buildBody() {
       switch (_currentIndex) {
         case 0:
           return const ChatPage();
         case 2:
           return const SwipePage();
         default:
-          return CameraPage(cameras: _cameras);
+          return const CameraPage();
       }
     }
 
@@ -86,9 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: _buildAppBar(),
-      body: _buildBody(),
-      bottomNavigationBar: _buildNavigationBar(),
+      appBar: buildAppBar(),
+      body: buildBody(),
+      bottomNavigationBar: buildNavigationBar(),
     );
   }
 }
