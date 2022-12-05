@@ -5,9 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 // A list of chats
 final List<Chat> initialData = [
-  Chat([Message(1, 0, "Hello", DateTime(2022)), Message(0, 1, "I like fishin", DateTime(2022))], 'Hailey', 'Alex'),
-  Chat([Message(2, 0, "Alex is gonna be late for class", DateTime(2022)), Message(0, 2, "I like fishin", DateTime(2022))], 'Hailey', 'Matt'),
-];
+
+  ];
 
 const String userLoggedIn = "Hailey";
 
@@ -41,20 +40,6 @@ class ChatViewModel with ChangeNotifier {
   // Retrieve all chats
   List<Chat> get chats => _chats;
 
-  /*List<List<Chat>> get byName {
-    if(_byName.length == 0) {
-      for (var name in names) {
-        _byName.add(getNamedchats(name));
-      }
-    }
-    return _byName;
-  }
-  
-  List<Chat> getNamedchats(String name){
-    return _chats.where((element) => element.user1Name == name || element.user2Name == name).toList();
-  }*/
-
-  // Send a chat
   void sendChat(Message message, int index) {
       // Get name index
       _chats[index].messages!.add(message);
