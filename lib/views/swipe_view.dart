@@ -139,7 +139,7 @@ class _SwipePage extends State<SwipePage> {
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.0,
+                            height: 100.0,
                             decoration: const BoxDecoration(
                               // TODO: make transparent? maybe
                                 color: Palette.orchid),
@@ -158,7 +158,7 @@ class _SwipePage extends State<SwipePage> {
                                     Flexible(
                                       child: Padding(
                                         padding:
-                                        const EdgeInsets.all(10.0),
+                                        const EdgeInsets.all(5.0),
                                         child: Text(
                                           usersData[index]['name']
                                           ['first'] +
@@ -171,6 +171,23 @@ class _SwipePage extends State<SwipePage> {
                                             color: Colors.white,
                                             fontSize: 35,
                                             fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    // TODO: remove const once we have bio
+                                    const Flexible(
+                                      child: Padding(
+                                        padding:
+                                        EdgeInsets.all(5),
+                                        child: Text(
+                                          "Hey! This is my bio. Need to handle longer text.",
+                                          // overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            // fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
