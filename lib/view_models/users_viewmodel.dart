@@ -59,3 +59,14 @@ Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
 
   upsertUser(user);
 }
+
+class UserViewModel with ChangeNotifier {
+  // All chats (that will be displayed on the Home screen)
+  final List<UserAccount> _users = users;
+
+  //List<List<Chat>> _byName = [];
+
+  // Retrieve all chats
+  List<UserAccount> get allUsers => _users;
+
+}
