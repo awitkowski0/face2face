@@ -52,19 +52,17 @@ class _SwipePage extends State<SwipePage> {
                 Center(
                     heightFactor: 1.425,
                     child:
-                        SizedBox(
-                    // Container(
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.only(
-                    //         topRight: Radius.circular(40),
-                    //           bottomRight: Radius.circular(40.0),
-                    //           bottomLeft: Radius.circular(40.0)
-                    //       ),
-                    //     ),
+                        // SizedBox(
+                    Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Palette.orchid, width:5),
+                          borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        ),
                         height: MediaQuery.of(context).size.height * 0.65,
                         width: MediaQuery.of(context).size.width * 0.95,
                         child:
                         ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
                             child: Image.network('${currentPhoto.url}.jpeg', fit: BoxFit.cover)
                         )
                     )
@@ -118,13 +116,13 @@ class _SwipePage extends State<SwipePage> {
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: Colors.white),
                        ),
                       ),
-      Padding(
-      padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
-                      child: Text(
-                        '${currentUser.shortBio}',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
+                        child: Text(
+                            '${currentUser.shortBio}',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)
+                        ),
                       ),
-      ),
                     ]
                     ),
                   ),
