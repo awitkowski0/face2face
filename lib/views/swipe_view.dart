@@ -1,4 +1,3 @@
-
 import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user.dart';
 import 'package:face2face/view_models/swipe_viewmodel.dart';
@@ -6,13 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../palette.dart';
+import 'package:face2face/palette.dart';
+import 'package:flutter/material.dart';
+import 'package:swipe_cards/draggable_card.dart';
+import 'package:swipe_cards/swipe_cards.dart';
+import 'package:http/http.dart' as http;
+import '../models/user.dart';
+import '../view_models/users_viewmodel.dart';
+import 'dart:convert';
 
-class SwipePage extends StatefulWidget {
-  const SwipePage({Key? key}) : super(key: key);
-
-  @override
-  State<SwipePage> createState() => _SwipePage();
-}
+// TODO: figure out why it only ever shows 2 cards and then breaks...
+// TODO: decide if we want like and dislike or just swiping
+// TODO: Add bio below name -- do we want to stick with using random generator or use firebase?
 
 class _SwipePage extends State<SwipePage> {
   late bool isInit = false;

@@ -3,10 +3,10 @@
 
 class Chat {
   final List<Message>? messages;
-  final String user1Name;
-  final String user2Name;
+  final String user1ID;
+  final String user2ID;
 
-  Chat(this.messages, this.user1Name, this.user2Name);
+  Chat(this.messages, this.user1ID, this.user2ID);
 
   factory Chat.fromJson(Map<String, dynamic> json) =>
       _chatFromJson(json);
@@ -49,8 +49,8 @@ Chat _chatFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _chatToJson(Chat chat) => {
   'messages': _messageList(chat.messages),
-  'user1Name': chat.user1Name,
-  'uesr2Name': chat.user2Name,
+  'user1Name': chat.user1ID,
+  'user2Name': chat.user2ID,
 };
 
 List<Map<String, dynamic>>? _messageList(List<Message>? messages) {
