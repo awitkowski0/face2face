@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:face2face/palette/palette.dart';
 import '../models/chat.dart';
+import '../models/user.dart';
+import '../view_models/users_viewmodel.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key})
@@ -14,32 +16,36 @@ class ChatPage extends StatefulWidget {
 
 class _ChatState extends State<ChatPage> {
   int _page = 0;
-  int _userIndex = 0;
-  int _userLoggedIn = 0;
-  String _chatPerson = "";
+  String _userIndex = "0";
+  String _userLoggedIn = "0";
+  List<UserAccount> users = [
+    UserAccount(uniqueKey: "0", displayName: "Hailey"),
+    UserAccount(uniqueKey: "1", displayName: "Alex"),
+    UserAccount(uniqueKey: "2", displayName: "Matt"),
+  ];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final List<Chat> allMsg = context.watch<ChatViewModel>().chats;
+    final List<Chat> allMsg = context.watch<ChatViewModel>().currUserChats;
 
     AlignmentGeometry getAl(int sender){
-      if(sender == _userLoggedIn)
+      if(sender == int.parse(_userLoggedIn))
         return Alignment.centerRight;
       else
         return Alignment.centerLeft;
     }
 
     Color? getColor(int sender){
-      if(sender == _userLoggedIn)
+      if(sender == int.parse(_userLoggedIn))
         return Palette.orchid[100];
       else
         return Colors.white;
     }
 
     CrossAxisAlignment getNameAl(int id){
-      if(id == _userLoggedIn)
+      if(id == int.parse(_userLoggedIn))
         return CrossAxisAlignment.end;
       else
         return CrossAxisAlignment.start;
@@ -79,12 +85,12 @@ class _ChatState extends State<ChatPage> {
                             IconButton(onPressed: () {
                               setState(() {
                                 _page = 1;
-                                _userIndex = index;
+                                _userIndex = allMsg[index].user2ID;
                               });
                             },
                                 icon: const Icon(Icons.chat_bubble_outline)),
                             Padding(padding: EdgeInsets.only(left: 8)),
-                            Text("${allMsg[index].user2Name}", style: TextStyle(
+                            Text("${users.firstWhere((element) => element.uniqueKey == allMsg[index].user2ID).displayName}", style: TextStyle(
                                 fontSize: 20,
                                 fontFamily: "Roboto",
                                 color: Color(0xFF000000))),
@@ -128,7 +134,7 @@ class _ChatState extends State<ChatPage> {
                         },
                             icon: const Icon(Icons.arrow_back, color: Color(0xFF000000),)),
                         Text(
-                          "${allMsg[_userIndex].user2Name}",
+                          "${users.firstWhere((element) => element.uniqueKey == allMsg.firstWhere((element) => element.user2ID == _userIndex).user2ID).displayName}",
                           style: TextStyle(
                               fontSize: 20,
                               color: Color(0xFF000000)
@@ -144,20 +150,20 @@ class _ChatState extends State<ChatPage> {
                   child: Container(
                       color: Palette.mauve[50],
                       child: ListView.builder(
-                        itemCount: allMsg[_userIndex].messages!.length,
+                        itemCount: allMsg.firstWhere((element) => element.user2ID == _userIndex).messages!.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Align(
-                            alignment: getAl(allMsg[_userIndex].messages![index].senderID),
+                            alignment: getAl(allMsg.firstWhere((element) => element.user2ID == _userIndex).messages![index].senderID),
                             child: Padding(
                               child: Column(
-                                  crossAxisAlignment: getNameAl(allMsg[_userIndex].messages![index].senderID),
+                                  crossAxisAlignment: getNameAl(allMsg.firstWhere((element) => element.user2ID == _userIndex).messages![index].senderID),
                                   children: [
-                                    Text("${allMsg[_userIndex].messages![index].senderID}"),
+                                    Text("${users.firstWhere((element) => element.uniqueKey == "${allMsg.firstWhere((element) => element.user2ID == _userIndex).messages![index].senderID}").displayName}"),
                                     Container(
                                         constraints: BoxConstraints(maxWidth: 250),
-                                        decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(allMsg[_userIndex].messages![index].senderID)),
+                                        decoration: BoxDecoration(border: Border.all(color: Colors.black), borderRadius: BorderRadius.circular(20), color: getColor(allMsg.firstWhere((element) => element.user2ID == _userIndex).messages![index].senderID)),
                                         padding: EdgeInsets.all(10),
-                                        child: Text("${allMsg[_userIndex].messages![index].message}", style: TextStyle(fontSize: 20),)
+                                        child: Text("${allMsg.firstWhere((element) => element.user2ID == _userIndex).messages![index].message}", style: TextStyle(fontSize: 20),)
                                     )
                                   ]
                               ),
@@ -197,7 +203,7 @@ class _ChatState extends State<ChatPage> {
                           child: ElevatedButton(
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
                             onPressed: () {
-                              context.read<ChatViewModel>().sendChat(Message(_userLoggedIn, _userIndex, messageController.text, DateTime.now()), _userIndex);
+                              context.read<ChatViewModel>().sendChat(Message(int.parse(_userLoggedIn), int.parse(_userIndex), messageController.text, DateTime.now()), _userLoggedIn, _userIndex);
                               messageController.text = "";
                             },
                             child: const Text('Send'),
