@@ -1,7 +1,7 @@
+import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
-import 'package:face2face/view_models/authentication_viewmodel.dart';
-import 'package:face2face/view_models/users_viewmodel.dart';
+import 'package:face2face/view_models/accounts_viewmodel.dart';
 import 'package:face2face/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,16 +11,12 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize firebase, then run the app
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ).then((_) => {
-        authenticateAccount(),
-        populateUsers(),
-        populateChat(),
-      });
+  );
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -29,6 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (_) => AuthenticationViewModel()),
+          ChangeNotifierProvider(create: (_) => AccountViewModel()),
           ChangeNotifierProvider(create: (_) => ChatViewModel()),
           ChangeNotifierProvider(create: (_) => CameraViewModel()),
         ],

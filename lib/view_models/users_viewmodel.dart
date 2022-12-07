@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:face2face/view_models/authentication_viewmodel.dart';
+import 'package:face2face/view_models/accounts_viewmodel.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -28,6 +28,11 @@ UserAccount getAccountUser() {
   return users.firstWhere((element) => element.uniqueKey == user!.uid);
 }
 
+getCurrentUser() {
+
+}
+
+// Get a user by their user id
 UserAccount getUser(String uid) {
   return users.firstWhere((element) => element.uniqueKey == uid);
 }

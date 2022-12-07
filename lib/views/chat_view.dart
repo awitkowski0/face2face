@@ -1,7 +1,7 @@
 import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:face2face/palette.dart';
+import 'package:face2face/palette/palette.dart';
 import '../models/chat.dart';
 import '../models/user.dart';
 import '../view_models/users_viewmodel.dart';

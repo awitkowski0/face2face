@@ -1,9 +1,12 @@
+import 'package:face2face/view_models/accounts_viewmodel.dart';
+import 'package:face2face/views/authentication_view.dart';
 import 'package:face2face/views/swipe_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'camera_view.dart';
 import 'chat_view.dart';
-import 'package:face2face/palette.dart';
+import 'package:face2face/palette/palette.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -17,7 +20,19 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<String> pages = <String>['Chat', 'Camera', 'Swipe'];
 
   @override
+  void initState() {
+    Provider.of<AccountViewModel>(context, listen: false).init();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Progress indicator while things are still loading...
+    Widget buildProgressIndicator() {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     // Our navigation bar, should be universal for all pages
     Widget buildNavigationBar() {
       return BottomNavigationBar(
@@ -57,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           onPressed: () {
+            Provider.of<AccountViewModel>(context, listen: false).signOut();
             // Respond to button press
           },
         ),
@@ -76,13 +92,19 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
 
-    // Main Application
-    return Scaffold(
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      appBar: buildAppBar(),
-      body: buildBody(),
-      bottomNavigationBar: buildNavigationBar(),
-    );
+    if (Provider.of<AccountViewModel>(context, listen: true).isInitialized) {
+      if (Provider.of<AccountViewModel>(context, listen: true)
+          .isAuthenticated()) {
+        return Scaffold(
+          appBar: buildAppBar(),
+          body: buildBody(),
+          bottomNavigationBar: buildNavigationBar(),
+        );
+      } else {
+        return const AuthenticationPage();
+      }
+    } else {
+      return Scaffold(body: buildProgressIndicator());
+    }
   }
 }

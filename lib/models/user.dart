@@ -24,6 +24,10 @@ class UserAccount {
   final double? distance;
   // Age of user
   final int? age;
+  // Liked (keys)
+  // Disliked (keys)
+  // Potentials (keys)
+  // Matches keys (keys)
 
   UserAccount({
     required this.uniqueKey,
