@@ -1,3 +1,10 @@
+import 'package:face2face/models/photos.dart';
+import 'package:face2face/models/user.dart';
+import 'package:face2face/view_models/swipe_viewmodel.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../palette.dart';
 import 'package:face2face/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:swipe_cards/draggable_card.dart';
@@ -11,242 +18,153 @@ import 'dart:convert';
 // TODO: decide if we want like and dislike or just swiping
 // TODO: Add bio below name -- do we want to stick with using random generator or use firebase?
 
-
-
-class SwipePage extends StatefulWidget {
-  const SwipePage({Key? key}) : super(key: key);
-
-  @override
-  _SwipePage createState() => _SwipePage();
-}
-// return Image.network(_swipeItems[index].content.photos[0].url + 'jpeg');
 class _SwipePage extends State<SwipePage> {
-  late List usersData;
-  final List<SwipeItem> _swipeItems = <SwipeItem>[];
-  bool isLoading = true;
-  MatchEngine? _matchEngine;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  // TODO: use real data from firebase
-  final String url = "https://randomuser.me/api/?results=10";
-
-  Future decodeData() async {
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {"Accept": "application/json"},
-    );
-
-    List data = jsonDecode(response.body)['results'];
-    setState(() {
-      usersData = data;
-    // have to replace below to use user data!!
-      if (usersData.isNotEmpty) {
-        for (int i = 0; i < usersData.length; i++) {
-          _swipeItems.add(SwipeItem(
-            content: usersData[i]['name']['first'],
-                likeAction: () {
-                  print("liked");
-                },
-                nopeAction: () {
-                  print("disliked");
-                },
-                onSlideUpdate: (SlideRegion? region) async {
-                  print("Region $region");
-                }));
-        } //for loop
-        _matchEngine = MatchEngine(swipeItems: _swipeItems);
-        isLoading = false;
-      } //if
-    }); // setState
-    // for (UserAccount user in users) {
-    //   _swipeItems.add(SwipeItem(
-    //       content: user,
-    //       likeAction: () {
-    //         print("liked");
-    //       },
-    //       nopeAction: () {
-    //         print("disliked");
-    //       },
-    //       onSlideUpdate: (SlideRegion? region) async {
-    //         print("Region $region");
-    //       }));
-    // } //for
-    // _matchEngine = MatchEngine(swipeItems: _swipeItems);
-    // isLoading = false;
-  }
+  late bool isInit = false;
+  late SwipeViewModel viewModel;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   @override
   void initState() {
+    viewModel = Provider.of<SwipeViewModel>(context, listen: false);
+
+    if (!isInit) viewModel.init();
+
     super.initState();
-    decodeData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: Colors.indigo[50],
-      key: _scaffoldKey,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        // TODO: reset or use as padding
-        toolbarHeight: 10.0,
-        titleSpacing: 36.0,
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-            child: CircleAvatar(
-              backgroundColor: Colors.white,
-            ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Center(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: SwipeCards(
-                  matchEngine: _matchEngine!,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: <Widget>[
-                        Card(
-                          margin: const EdgeInsets.all(16.0),
-                          elevation: 12.0,
-                          color: Colors.white,
-                          // TODO: Figure out how to add padding to banner so that both have white border?
-                          child: Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: ClipRRect(
-                              child: Image.network(
-                                // "https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?cs=srgb&dl=pexels-hitesh-choudhary-3532552.jpg&fm=jpg",
-                                usersData[index]['picture']['large'],
+    // This method is specific to the camera
 
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.all(20.0),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            height: 100.0,
-                            decoration: const BoxDecoration(
-                              // TODO: make transparent? maybe
-                                color: Palette.orchid),
-                            margin: const EdgeInsets.fromLTRB(
-                                18.0, 10.0, 14.0, 10.0),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Flexible(
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.all(5.0),
-                                        child: Text(
-                                          usersData[index]['name']
-                                          ['first'] +
-                                              ", " +
-                                              usersData[index]['dob']
-                                              ['age']
-                                                  .toString(),
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 35,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    // TODO: remove const once we have bio
-                                    const Flexible(
-                                      child: Padding(
-                                        padding:
-                                        EdgeInsets.all(5),
-                                        child: Text(
-                                          "Hey! This is my bio. Need to handle longer text.",
-                                          // overflow: TextOverflow.ellipsis,
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            // fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                  onStackFinished: () {
-                    // TODO: add onStackFinished
-                  },
-                  itemChanged: (SwipeItem item, int index) {
-                    print("item: ${item.content.text}, index: $index");
-                  },
-                  upSwipeAllowed: true,
-                  fillSpace: true,
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    Widget buildCards() {
+      List<UserAccount> cardValues = Provider.of<SwipeViewModel>(context, listen: true).potentialMatches;
+      UserAccount currentUser = Provider.of<SwipeViewModel>(context, listen: true).currentUser;
+      Photo currentPhoto = Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
+
+      if (cardValues.isNotEmpty) {
+        return Scaffold(
+          key: _scaffoldKey,
+          extendBody: true,
+          body: Stack(children: [
+            Stack(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.heart_broken_outlined,
+                Center(
+                    heightFactor: 1.425,
+                    child:
+                        // SizedBox(
+                    Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Palette.orchid, width:5),
+                          borderRadius: BorderRadius.all(Radius.circular(40.0)),
+                        ),
+                        height: MediaQuery.of(context).size.height * 0.65,
+                        width: MediaQuery.of(context).size.width * 0.95,
+                        child:
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: Image.network('${currentPhoto.url}.jpeg', fit: BoxFit.cover)
+                        )
+                    )
+                ),
+                Container(
+                    height: MediaQuery.of(context).size.height * 0.65,
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    child:
+                    Row(
+                        children: [
+                          Container(
+                              height: MediaQuery.of(context).size.height * 0.65,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.read<SwipeViewModel>().lastPhoto();
+                                },
+                              )
+                          ),
+                          Container(
+                              height: MediaQuery.of(context).size.height * 0.65,
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.read<SwipeViewModel>().nextPhoto();
+                                },
+                              )
+                          )
+                        ]
+                    ),
+                )]
+            ),
+            Column(
+              children: [
+                SizedBox(height: MediaQuery.of(context).size.height * 0.7, width: MediaQuery.of(context).size.width),
+                  Container(
+                    decoration: BoxDecoration(
+                     color: Palette.orchid,
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(40.0),
+                        bottomLeft: Radius.circular(40.0)
+                      ),
+                    ),
+                    width: MediaQuery.of(context).size.width * 0.95,
+                    child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 15, 5, 5),
+                        child: Text(
+                          '${currentUser.displayName}, ${currentUser.age}',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: Colors.white),
+                       ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
+                        child: Text(
+                            '${currentUser.shortBio}',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)
+                        ),
+                      ),
+                    ]
+                    ),
+                  ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.025, width: MediaQuery.of(context).size.width),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        context.read<SwipeViewModel>().dislikeUser();
+                      },
+                      icon: const Icon(
+                        Icons.heart_broken_sharp,
                         color: Palette.grape,
                         size: 60.0,
+                      ),
                     ),
-                    onPressed: () {
-                      // TODO: change to dislike
-                      _matchEngine!.currentItem?.nope();
-                    },
-                  ),
+                    IconButton(
+                      onPressed: () {
+                        context.read<SwipeViewModel>().likeUser();
+                      },
+                      icon: const Icon(
+                        Icons.favorite_sharp,
+                        color: Palette.pink,
+                        size: 60.0,
+                      ),
+                    ),
+                  ],
                 ),
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.favorite_sharp,
-                      color: Palette.pink,
-                      size: 60.0,
-                    ),
-                    onPressed: () {
-                      _matchEngine!.currentItem?.like();
-                    },
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+              ])
+            ])
+        );
+      } else {
+        // TODO: Empty "end of card" sad card
+        return const Center(child: CircularProgressIndicator());
+      }
+    }
+
+    return buildCards();
   }
 }

@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.swipe_outlined),
+            icon: Icon(Icons.favorite_border_sharp),
             label: '',
           ),
         ],

@@ -1,28 +1,55 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:camera/camera.dart';
+import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 
-Future<void> takePicture(CameraController cameraController) async {
-  await cameraController.takePicture().then((photo) async {
-    await photo.readAsBytes().then((value) => createPhoto(value));
-  });
-}
+class SwipeViewModel extends ChangeNotifier {
+  late List<UserAccount> potentialMatches;
+  late UserAccount currentUser;
+  late int index;
+  late List<Photo> currentUserPhotos;
+  late Photo currentPhoto;
+  late int photoIndex;
 
-Uint8List getUserPhoto(UserAccount userAccount) {
-  final photo = userAccount.photos?.first;
-  final storageRef = FirebaseStorage.instance.ref();
-  final photoRef = storageRef.child("images/{$photo?.id}");
-
-  try {
-    photoRef.getData().then((value) {
-      return value;
-    });
-  } on FirebaseException catch (e) {
-    // Handle any errors.
+  Future<void> init() async {
+    potentialMatches = users;
+    currentUser = potentialMatches[0];
+    currentUserPhotos = currentUser.photos!;
+    currentPhoto = currentUserPhotos[0];
+    photoIndex = 0;
+    index = 0;
   }
-  return Uint8List(0);
+
+  Future<void> likeUser() async {
+    nextUser();
+    // TODO: match storing
+  }
+  Future<void> dislikeUser() async {
+    nextUser();
+    // TODO: not matching
+  }
+  Future<void> nextUser() async {
+    if (potentialMatches.length > (index + 1)) {
+      currentUser = potentialMatches[index + 1];
+      currentUserPhotos = currentUser.photos!;
+      index += 1;
+      notifyListeners();
+    }
+    // TODO: add a condition if there's none
+    // TODO: add an "end of stack" card
+  }
+  Future<void> lastPhoto() async {
+    if (currentUserPhotos.isNotEmpty && currentUserPhotos.length > (photoIndex - 1)) {
+      currentPhoto = currentUserPhotos[photoIndex - 1];
+      photoIndex -= 1;
+      notifyListeners();
+    }
+  }
+  Future<void> nextPhoto() async {
+    if (currentUserPhotos.isNotEmpty && currentUserPhotos.length > (photoIndex + 1)) {
+      currentPhoto = currentUserPhotos[photoIndex + 1];
+      photoIndex += 1;
+      notifyListeners();
+    }
+  }
 }
