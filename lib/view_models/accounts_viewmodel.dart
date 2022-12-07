@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -8,10 +9,14 @@ import '../models/user.dart';
 
 class AccountViewModel extends ChangeNotifier {
   final List<UserAccount> users = [];
-  final _auth = FirebaseStorage.instance;
-  User? _currentUser = FirebaseAuth.instance.currentUser;
+  final _firestoreAuth = FirebaseStorage.instance;
+  final _firebaseAuth = FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.LOCAL);
 
-  bool get isInitialized => (_auth.bucket.isNotEmpty);
+  User? _currentUser = FirebaseAuth.instance.currentUser;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  bool get isInitialized => (_firestoreAuth.bucket.isNotEmpty);
 
   /// Currently populates all users from DB
   /// Move to only populate "potential matches"
@@ -25,19 +30,31 @@ class AccountViewModel extends ChangeNotifier {
 
   // init firebase, attempt to authenticate the user
   void init() {
-    authenticateAccount();
     populateUsers();
 
     // populate chats @Matt
     populateChat();
   }
 
+  void createAccount() async {
+    try {
+      final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+      if (newUser != null) {
+        _currentUser = newUser.user;
+      }
+    } catch (e) {
+      print(e);
+    }
+    authenticateAccount();
+  }
+
   // Authenticate the current user against the Firebase Authentication service.
   void authenticateAccount() async {
     try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: 'testuser@pitt.edu',
-          password: 'password'
+      final credential = await _firebaseAuth.signInWithEmailAndPassword(
+          email: emailController.value.text,
+          password: passwordController.value.text
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -47,7 +64,7 @@ class AccountViewModel extends ChangeNotifier {
       }
     }
 
-    FirebaseAuth.instance
+    _firebaseAuth
         .authStateChanges()
         .listen((User? user) {
       if (user != null) {
@@ -58,7 +75,7 @@ class AccountViewModel extends ChangeNotifier {
 
   // Sign out the current user
   void signOut() {
-    FirebaseAuth.instance.signOut();
+    _firebaseAuth.signOut();
     _currentUser = null;
   }
 
@@ -69,8 +86,6 @@ class AccountViewModel extends ChangeNotifier {
 
   // Check if the current user is authenticated
   bool isAuthenticated() {
-    return false;
-
     return _currentUser != null;
   }
 

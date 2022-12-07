@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           onPressed: () {
+            Provider.of<AccountViewModel>(context, listen: false).signOut();
             // Respond to button press
           },
         ),

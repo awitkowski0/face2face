@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../palette/buttons.dart';
+import '../view_models/accounts_viewmodel.dart';
 import '../view_models/authentication_viewmodel.dart';
 
 class AuthenticationPage extends StatefulWidget {
@@ -19,15 +20,61 @@ class _AuthenticationState extends State<AuthenticationPage> {
 
   // Registration form if the user doesn't have an account
   Widget registrationForm() {
-    return const Center(
-      child: Text('Registration Page'),
+    return Form(
+      child: Card(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: context.read<AccountViewModel>().emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                ),
+              ),
+              TextFormField(
+                controller: context.read<AccountViewModel>().passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Provider.of<AccountViewModel>(context, listen: false).createAccount();
+                },
+                child: const Text('Login'),
+              ),
+            ],
+          )
+      ),
     );
   }
 
   // Login form if the user already has an account
   Widget loginForm() {
-    return const Center(
-      child: Text('Login Page'),
+    return Form(
+      child: Card(
+        child: Column(
+          children: [
+            TextFormField(
+              controller: context.read<AccountViewModel>().emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            TextFormField(
+              controller: context.read<AccountViewModel>().passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Provider.of<AccountViewModel>(context, listen: false).authenticateAccount();
+              },
+              child: const Text('Login'),
+            ),
+          ],
+        )
+      ),
     );
   }
 
