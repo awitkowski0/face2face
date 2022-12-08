@@ -1,33 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-User? _user = FirebaseAuth.instance.currentUser;
+class AuthenticationViewModel extends ChangeNotifier {
+  // The current state, should default to 0 for the auth form
+  // 1 is for registration
+  // 2 is for login
+  int state = 0;
 
-void authenticateAccount() async {
-  try {
-    final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: 'testuser@pitt.edu',
-        password: 'password'
-    );
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      print('No user found for that email.');
-    } else if (e.code == 'wrong-password') {
-      print('Wrong password provided for that user.');
-    }
+  // Update the registration form state
+  void updateState(int newState) {
+    state = newState;
+    notifyListeners();
   }
-
-  FirebaseAuth.instance
-      .authStateChanges()
-      .listen((User? user) {
-    if (user == null) {
-      print('User is currently signed out!');
-    } else {
-      print('User is signed in!');
-      _user = user;
-    }
-  });
-}
-
-getCurrentUser() {
-  return _user;
 }

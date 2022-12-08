@@ -1,6 +1,3 @@
-
-import 'package:flutter/widgets.dart';
-
 class Photo {
   final String id;
   final String url;
