@@ -15,10 +15,7 @@ void main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  ).then((_) => {
-        populateUsers(),
-        populateChat(),
-      });
+  );
   runApp(const MyApp());
 }
 
