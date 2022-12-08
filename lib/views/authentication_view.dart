@@ -23,28 +23,53 @@ class _AuthenticationState extends State<AuthenticationPage> {
     return Form(
       child: Card(
           child: Column(
-            children: [
-              TextFormField(
-                controller: context.read<AccountViewModel>().emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ),
-              ),
-              TextFormField(
-                controller: context.read<AccountViewModel>().passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<AccountViewModel>(context, listen: false).createAccount();
-                },
-                child: const Text('Login'),
-              ),
-            ],
-          )
-      ),
+        children: [
+          TextFormField(
+            controller: context.read<AccountViewModel>().emailController,
+            decoration: const InputDecoration(
+              labelText: 'First Name',
+            ),
+          ),
+          TextFormField(
+            controller: context.read<AccountViewModel>().emailController,
+            decoration: const InputDecoration(
+              labelText: 'First Name',
+            ),
+          ),
+          TextFormField(
+            controller: context.read<AccountViewModel>().emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            ),
+          ),
+          TextFormField(
+            controller: context.read<AccountViewModel>().passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+            ),
+          ),
+          TextFormField(
+            controller: context.read<AccountViewModel>().passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Repeat Password',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<AccountViewModel>(context, listen: false)
+                  .createAccount();
+            },
+            child: const Text('Register'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<AuthenticationViewModel>(context, listen: false)
+                  .updateState(0);
+            },
+            child: const Text('Home'),
+          ),
+        ],
+      )),
     );
   }
 
@@ -53,49 +78,58 @@ class _AuthenticationState extends State<AuthenticationPage> {
     return Form(
       child: Card(
           child: Column(
-            children: [
-              TextFormField(
-                controller: context.read<AccountViewModel>().emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                ),
-              ),
-              TextFormField(
-                controller: context.read<AccountViewModel>().passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Provider.of<AccountViewModel>(context, listen: false).authenticateAccount();
-                },
-                child: const Text('Login'),
-              ),
-            ],
-          )
-      ),
+        children: [
+          TextFormField(
+            controller: context.read<AccountViewModel>().emailController,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+            ),
+          ),
+          TextFormField(
+            controller: context.read<AccountViewModel>().passwordController,
+            decoration: const InputDecoration(
+              labelText: 'Password',
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<AccountViewModel>(context, listen: false)
+                  .authenticateAccount();
+            },
+            child: const Text('Login'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Provider.of<AuthenticationViewModel>(context, listen: false)
+                  .updateState(0);
+            },
+            child: const Text('Home'),
+          ),
+        ],
+      )),
     );
   }
 
   Widget authForm() {
     return Form(
         child: Column(children: <Widget>[
-          ElevatedButton(
-            style: roundedButton,
-            onPressed: () {
-              Provider.of<AuthenticationViewModel>(context, listen: false).updateState(1);
-            },
-            child: const Text('Sign In'),
-          ),
-          ElevatedButton(
-            style: roundedButton,
-            onPressed: () {
-              Provider.of<AuthenticationViewModel>(context, listen: false).updateState(2);
-            },
-            child: const Text('Register'),
-          )])
-    );
+      ElevatedButton(
+        style: roundedButton,
+        onPressed: () {
+          Provider.of<AuthenticationViewModel>(context, listen: false)
+              .updateState(1);
+        },
+        child: const Text('Sign In'),
+      ),
+      ElevatedButton(
+        style: roundedButton,
+        onPressed: () {
+          Provider.of<AuthenticationViewModel>(context, listen: false)
+              .updateState(2);
+        },
+        child: const Text('Register'),
+      )
+    ]));
   }
 
   @override
@@ -116,16 +150,16 @@ class _AuthenticationState extends State<AuthenticationPage> {
 
     return SingleChildScrollView(
         child: Column(children: <Widget>[
-          Container(
-              height: 400,
-              width: 400,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/face2face.png'),
-                  ))),
-          Container(
-            child: body,
-          )
-        ]));
+      Container(
+          height: 400,
+          width: 400,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage('assets/images/face2face.png'),
+          ))),
+      Container(
+        child: body,
+      )
+    ]));
   }
 }

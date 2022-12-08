@@ -34,6 +34,7 @@ class AccountViewModel extends ChangeNotifier {
 
     // populate chats @Matt
     populateChat();
+    notifyListeners();
   }
 
   void createAccount() async {
@@ -71,12 +72,14 @@ class AccountViewModel extends ChangeNotifier {
         _currentUser = user;
       }
     });
+    notifyListeners();
   }
 
   // Sign out the current user
   void signOut() {
     _firebaseAuth.signOut();
     _currentUser = null;
+    notifyListeners();
   }
 
   // Grab the current user (should be initialized)
