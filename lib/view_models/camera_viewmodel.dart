@@ -1,59 +1,53 @@
-import 'dart:collection';
-
 import 'package:camera/camera.dart';
+import 'package:face2face/models/photos.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 
 class CameraViewModel extends ChangeNotifier {
+  late String? photoURL = '';
+  late bool isPreviewReady = false;
   late final List<CameraController> _cameras = [];
   late CameraController controller;
-  late bool isInitialized = false;
+  late int _currentCamera = 0;
 
+  // Change the camera you have open
   Future<void> changeCameras() async {
-    if (_cameraMap.length > 1) {
-      notifyListeners();
+    if (_cameras.isNotEmpty && _cameras.length > (_currentCamera + 1)) {
+      controller = _cameras[_currentCamera + 1];
+      _currentCamera++;
+    } else {
+      controller = _cameras[0];
+      _currentCamera = 0;
     }
+    controller.initialize().then((value) => notifyListeners());
   }
 
   // Initialize cameras and camera controller
   Future<void> init() async {
+    _currentCamera = 0;
+
     await availableCameras().then((value) => {
       value.forEach((element) {
-        _cameraMap[element] = CameraController(element, ResolutionPreset.medium);
-        isInitialized = true;
+        _cameras.add(CameraController(element, ResolutionPreset.ultraHigh));
       })
-    }).then((value) => notifyListeners());
-
-    if (_cameraMap.isNotEmpty && !isInitialized) {
-      // we specify the camera we want to use here, and the resolution to it
-      controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
-
-      controller.initialize().then((_) {
-        isInitialized = true;
-        notifyListeners();
-      }).catchError((Object e) {
-        if (e is CameraException) {
-          switch (e.code) {
-            case 'CameraAccessDenied':
-              // TODO: Kill the application.
-              print('User denied camera access.');
-              break;
-            default:
-              // Crash the application.
-              print('Handle other errors.');
-              break;
-          }
-        }
-      });
-    } else {
-      print('No cameras available.');
-    }
+    }).then((value) => {
+      controller = _cameras[_currentCamera],
+      controller.initialize().then((value) => notifyListeners())
+    });
   }
 
+  Future<void> discardPreview() async {
+    isPreviewReady = false;
+  }
   // Take a picture
   Future<void> takePicture() async {
     await controller.takePicture().then((photo) async {
-      await photo.readAsBytes().then((value) => createPhoto(value));
+      await photo.readAsBytes().then((value) => {
+        createPhoto(value).then((value) => {
+          photoURL = value.url,
+          isPreviewReady = true,
+          notifyListeners()}),
+      });
     });
   }
 }

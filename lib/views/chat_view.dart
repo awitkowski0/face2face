@@ -21,6 +21,7 @@ class _ChatState extends State<ChatPage> {
     UserAccount(uniqueKey: "0", displayName: "Hailey"),
     UserAccount(uniqueKey: "1", displayName: "Alex"),
     UserAccount(uniqueKey: "2", displayName: "Matt"),
+    UserAccount(uniqueKey: "3", displayName: "Jacob")
   ];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController messageController = TextEditingController();

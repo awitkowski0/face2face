@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
+import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -48,6 +49,7 @@ class AccountViewModel extends ChangeNotifier {
       print(e);
     }
     authenticateAccount();
+    upsertUser(UserAccount(uniqueKey: _currentUser!.uid, displayName: _currentUser!.displayName));
   }
 
   // Authenticate the current user against the Firebase Authentication service.

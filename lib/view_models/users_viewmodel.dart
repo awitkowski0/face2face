@@ -5,6 +5,7 @@ import 'package:face2face/models/photos.dart';
 import 'package:face2face/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -25,11 +26,11 @@ Future<void> populateUsers() async {
 UserAccount getAccountUser() {
   var user = getCurrentUser();
 
-  return users.firstWhere((element) => element.uniqueKey == user!.uid);
+  return users.firstWhere((element) => element.uniqueKey == user.uid);
 }
 
 getCurrentUser() {
-
+  return FirebaseAuth.instance.currentUser;
 }
 
 // Get a user by their user id
@@ -47,7 +48,7 @@ Future<void> upsertUser(UserAccount user) async {
 }
 
 // Create a new photo for the user
-Future<void> createPhoto(Uint8List file) async {
+Future<Photo> createPhoto(Uint8List file) async {
   final user = getAccountUser();
   final uid = user.uniqueKey.toString();
   final ref = storage.ref().child('photos/$uid-${DateTime.now()}.jpeg');
@@ -55,6 +56,7 @@ Future<void> createPhoto(Uint8List file) async {
   await ref.putData(file, SettableMetadata(contentType: 'image/jpeg', customMetadata: {'name': 'photo'})).then((photo) {
     addPhoto(user, photo);
   });
+  return Photo(url: ref.fullPath, createdAt: DateTime.now().toString(), id: ref.fullPath);
 }
 
 // Add a photo to user.photos and update user
