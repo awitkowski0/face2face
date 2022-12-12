@@ -6,6 +6,8 @@ import '../view_models/accounts_viewmodel.dart';
 import '../view_models/authentication_viewmodel.dart';
 
 class AuthenticationPage extends StatefulWidget {
+  static const String routeName = "/authentication";
+
   const AuthenticationPage({Key? key}) : super(key: key);
 
   @override

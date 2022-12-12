@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AccountPage extends StatelessWidget {
-  static const String routeName = "/Account";
+  static const String routeName = "/account";
 
   const AccountPage({Key? key}) : super(key: key);
 

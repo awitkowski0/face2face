@@ -1,3 +1,4 @@
+import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
@@ -32,12 +33,11 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => ChatViewModel()),
           ChangeNotifierProvider(create: (_) => CameraViewModel()),
           ChangeNotifierProvider(create: (_) => SwipeViewModel()),
-
         ],
         child: MaterialApp(
           title: 'face2face',
           theme: ThemeData(
-            primarySwatch: Colors.red,
+            primarySwatch: Palette.orchid,
           ),
           home: const MyHomePage(),
         ));

@@ -21,10 +21,13 @@ class _ChatState extends State<ChatPage> {
     UserAccount(uniqueKey: "0", displayName: "Hailey"),
     UserAccount(uniqueKey: "1", displayName: "Alex"),
     UserAccount(uniqueKey: "2", displayName: "Matt"),
-    UserAccount(uniqueKey: "3", displayName: "Jacob")
+    UserAccount(uniqueKey: "3", displayName: "Jacob"),
+    UserAccount(uniqueKey: "4", displayName: "Luis"),
   ];
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController messageController = TextEditingController();
+  final GlobalKey<FormState> _chatKey = GlobalKey<FormState>();
+  TextEditingController chatController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +47,12 @@ class _ChatState extends State<ChatPage> {
         return Colors.white;
     }
 
+    String getLastMsg(Chat chat){
+      if(chat.messages!.length > 0)
+        return chat.messages![chat.messages!.length-1].message;
+      return "";
+    }
+
     CrossAxisAlignment getNameAl(int id){
       if(id == int.parse(_userLoggedIn))
         return CrossAxisAlignment.end;
@@ -60,59 +69,120 @@ class _ChatState extends State<ChatPage> {
                 .of(context)
                 .size
                 .width,
-            padding: const EdgeInsets.only(top: 50.0, left: 8, right: 8),
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: allMsg.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2,
-                              color: Color(0xFF606060)
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Palette.orchid[100]
-                      ),
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width - 20,
-                      child: Row(
-                          children: [
-                            Padding(padding: EdgeInsets.only(left: 5)),
-                            IconButton(onPressed: () {
-                              setState(() {
-                                _page = 1;
-                                _userIndex = allMsg[index].user2ID;
-                              });
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            child: Column(
+                children: [
+                  Form(
+                    key: _chatKey,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(padding: EdgeInsets.only(left:20)),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width - 200,
+                            child: TextFormField(
+                              cursorColor: Palette.orchid,
+                              controller: chatController,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid, width: 2)),
+                                suffixIconColor: Palette.pink,
+                                hintText: 'Enter username',
+                              ),
+                              validator: (String? value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                UserAccount found = users.firstWhere((element) => element.displayName == value, orElse: () => UserAccount(uniqueKey: "-1"));
+                                if(found.uniqueKey == "-1"){
+                                  return 'Not a valid username';
+                                }
+                                return null;
+                              },
+                            )
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: ElevatedButton(
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Palette.orchid[500])),
+                            onPressed: () {
+                              if (_chatKey.currentState!.validate()) {
+                                UserAccount found = users.firstWhere((element) => element.displayName == chatController.text);
+                                Chat newchat = allMsg.firstWhere((element) => element.user2ID == found.uniqueKey, orElse: () => Chat([], "-1", "-1"));
+                                if(newchat.user2ID != "-1"){
+                                  setState(() {
+                                    _page = 1;
+                                    _userIndex = newchat.user2ID;
+                                  });
+                                }
+                                else {
+                                  context.read<ChatViewModel>().newChat(found.uniqueKey);
+                                }
+                                chatController.text = "";
+                              }
                             },
-                                icon: const Icon(Icons.chat_bubble_outline)),
-                            Padding(padding: EdgeInsets.only(left: 8)),
-                            Text("${users.firstWhere((element) => element.uniqueKey == allMsg[index].user2ID).displayName}", style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: "Roboto",
-                                color: Color(0xFF000000))),
-                            Expanded(child: Container(constraints: BoxConstraints(minWidth: 50),)),
-                            Flexible(
-                              child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text("${allMsg[index].messages![allMsg[index].messages!.length-1].message}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        fontFamily: "Roboto",
-                                        color: Color(0xFF000000),
-                                      )
-                                  )),
+                            child: const Text('New Chat'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8),
+                      itemCount: allMsg.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 2,
+                                    color: Color(0xFF606060)
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                color: Palette.orchid[100]
                             ),
-                            Padding(padding: EdgeInsets.only(right: 8))
-                          ]
-                      )
-                  );
-                }
-            )
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width - 20,
+                            child: Row(
+                                children: [
+                                  Padding(padding: EdgeInsets.only(left: 5)),
+                                  IconButton(onPressed: () {
+                                    setState(() {
+                                      _page = 1;
+                                      _userIndex = allMsg[index].user2ID;
+                                    });
+                                  },
+                                      icon: const Icon(Icons.chat_bubble_outline)),
+                                  Padding(padding: EdgeInsets.only(left: 8)),
+                                  Text("${users.firstWhere((element) => element.uniqueKey == allMsg[index].user2ID).displayName}", style: TextStyle(
+                                      fontSize: 20,
+                                      fontFamily: "Roboto",
+                                      color: Color(0xFF000000))),
+                                  Expanded(child: Container(constraints: BoxConstraints(minWidth: 50),)),
+                                  Flexible(
+                                    child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(getLastMsg(allMsg[index]),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: "Roboto",
+                                              color: Color(0xFF000000),
+                                            )
+                                        )),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(right: 8))
+                                ]
+                            )
+                        );
+                      }
+                  )
+                ])
         );
       }
       else{  // Go into chat with other user
@@ -124,7 +194,7 @@ class _ChatState extends State<ChatPage> {
                       .of(context)
                       .size
                       .width,
-                  padding: const EdgeInsets.only(top: 50.0, left: 8, right: 8),
+                  padding: const EdgeInsets.only(left: 8, right: 8),
                   child: Row(
                       children: [
                         IconButton(onPressed: () {
@@ -180,23 +250,23 @@ class _ChatState extends State<ChatPage> {
                       children: <Widget>[
                         Padding(padding: EdgeInsets.only(left:20)),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width - 100,
-                          child: TextFormField(
-                            cursorColor: Palette.orchid,
-                            controller: messageController,
-                            decoration: const InputDecoration(
-                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid)),
-                              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid, width: 2)),
-                              suffixIconColor: Palette.pink,
-                              hintText: 'Message',
-                            ),
-                            validator: (String? value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter some text';
-                              }
-                              return null;
-                            },
-                          )
+                            width: MediaQuery.of(context).size.width - 100,
+                            child: TextFormField(
+                              cursorColor: Palette.orchid,
+                              controller: messageController,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Palette.orchid, width: 2)),
+                                suffixIconColor: Palette.pink,
+                                hintText: 'Message',
+                              ),
+                              validator: (String? value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                            )
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -213,7 +283,6 @@ class _ChatState extends State<ChatPage> {
                     ),
                   )
               ),
-              Padding(padding: EdgeInsets.only(bottom: 50))
             ]
         );
       }

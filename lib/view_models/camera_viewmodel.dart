@@ -1,14 +1,23 @@
 import 'package:camera/camera.dart';
-import 'package:face2face/models/photos.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../models/photos.dart';
+
+
 class CameraViewModel extends ChangeNotifier {
-  late String? photoURL = '';
   late bool isPreviewReady = false;
   late final List<CameraController> _cameras = [];
   late CameraController controller;
   late int _currentCamera = 0;
+
+  getCurrentUser() {
+    return getAccountUser();
+  }
+
+  Photo getCurrentPhoto() {
+    return getAccountUser().photos!.last;
+  }
 
   // Change the camera you have open
   Future<void> changeCameras() async {
@@ -38,15 +47,16 @@ class CameraViewModel extends ChangeNotifier {
 
   Future<void> discardPreview() async {
     isPreviewReady = false;
+    notifyListeners();
   }
   // Take a picture
   Future<void> takePicture() async {
     await controller.takePicture().then((photo) async {
       await photo.readAsBytes().then((value) => {
         createPhoto(value).then((value) => {
-          photoURL = value.url,
           isPreviewReady = true,
-          notifyListeners()}),
+          notifyListeners()
+        }),
       });
     });
   }

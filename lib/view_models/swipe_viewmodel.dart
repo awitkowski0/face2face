@@ -20,6 +20,16 @@ class SwipeViewModel extends ChangeNotifier {
     index = 0;
   }
 
+  Future<void> forceUser(UserAccount userAccount) async {
+    currentUser = userAccount;
+    currentUserPhotos = currentUser.photos!;
+    currentPhoto = currentUserPhotos[0];
+    photoIndex = 0;
+    index = 0;
+
+    notifyListeners();
+  }
+
   Future<void> likeUser() async {
     nextUser();
     // TODO: match storing

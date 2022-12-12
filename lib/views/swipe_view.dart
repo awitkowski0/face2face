@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import '../palette/palette.dart';
 
 class SwipePage extends StatefulWidget {
+  static const String routeName = "/swipe";
+
   const SwipePage({Key? key}) : super(key: key);
 
   @override
@@ -37,123 +39,14 @@ class _SwipePage extends State<SwipePage> {
     // This method is specific to the camera
 
     Widget buildCards() {
-      List<UserAccount> cardValues = Provider.of<SwipeViewModel>(context, listen: true).potentialMatches;
-      UserAccount currentUser = Provider.of<SwipeViewModel>(context, listen: true).currentUser;
+      List<UserAccount> cardValues =
+          Provider.of<SwipeViewModel>(context, listen: true).potentialMatches;
+      UserAccount currentUser =
+          Provider.of<SwipeViewModel>(context, listen: true).currentUser;
       Photo currentPhoto = Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
 
       if (cardValues.isNotEmpty) {
-        return Scaffold(
-            key: _scaffoldKey,
-            extendBody: true,
-            body: Stack(children: [
-              Stack(
-                  children: [
-                    Center(
-                        heightFactor: 1.425,
-                        child:
-                        // SizedBox(
-                        Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Palette.orchid, width:5),
-                              borderRadius: BorderRadius.all(Radius.circular(40.0)),
-                            ),
-                            height: MediaQuery.of(context).size.height * 0.65,
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            child:
-                            ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: Image.network('${currentPhoto.url}.jpeg', fit: BoxFit.cover)
-                            )
-                        )
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.65,
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      child:
-                      Row(
-                          children: [
-                            Container(
-                                height: MediaQuery.of(context).size.height * 0.65,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    context.read<SwipeViewModel>().lastPhoto();
-                                  },
-                                )
-                            ),
-                            Container(
-                                height: MediaQuery.of(context).size.height * 0.65,
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    context.read<SwipeViewModel>().nextPhoto();
-                                  },
-                                )
-                            )
-                          ]
-                      ),
-                    )]
-              ),
-              Column(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.7, width: MediaQuery.of(context).size.width),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Palette.orchid,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(40.0),
-                            bottomLeft: Radius.circular(40.0)
-                        ),
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.95,
-                      child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(5, 15, 5, 5),
-                              child: Text(
-                                '${currentUser.displayName}, ${currentUser.age}',
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: Colors.white),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(5, 0, 5, 15),
-                              child: Text(
-                                  '${currentUser.shortBio}',
-                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)
-                              ),
-                            ),
-                          ]
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.025, width: MediaQuery.of(context).size.width),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            context.read<SwipeViewModel>().dislikeUser();
-                          },
-                          icon: const Icon(
-                            Icons.heart_broken_sharp,
-                            color: Palette.grape,
-                            size: 60.0,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            context.read<SwipeViewModel>().likeUser();
-                          },
-                          icon: const Icon(
-                            Icons.favorite_sharp,
-                            color: Palette.pink,
-                            size: 60.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ])
-            ])
-        );
+        return buildCardForUser(context, currentUser, true, currentPhoto);
       } else {
         // TODO: Empty "end of card" sad card
         return const Center(child: CircularProgressIndicator());
@@ -162,4 +55,114 @@ class _SwipePage extends State<SwipePage> {
 
     return buildCards();
   }
+}
+
+Widget buildCardForUser(BuildContext context, UserAccount userAccount, bool withButtons, Photo photo) {
+  return Scaffold(
+      extendBody: true,
+      body: Stack(children: [
+        Stack(children: [
+          Center(
+              heightFactor: 1.075,
+              child:
+              // SizedBox(
+              Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Palette.pink, width: 5),
+                    borderRadius: const BorderRadius.all(Radius.circular(40.0)),
+                  ),
+                  height: MediaQuery.of(context).size.height * 0.625,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Image.network('${photo.url}.jpeg',
+                          fit: BoxFit.cover)))),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.560,
+            width: MediaQuery.of(context).size.width * 0.95,
+            child: Row(children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: GestureDetector(
+                    onTap: () {
+                      Provider.of<SwipeViewModel>(context, listen: false).lastPhoto();
+                    },
+                  )),
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: GestureDetector(
+                    onTap: () {
+                      Provider.of<SwipeViewModel>(context, listen: false).nextPhoto();
+                    },
+                  ))
+            ]),
+          )
+        ]),
+        Column(children: [
+          SizedBox(
+              height: MediaQuery.of(context).size.height * 0.560,
+              width: MediaQuery.of(context).size.width),
+          Container(
+            decoration: const BoxDecoration(
+              color: Palette.pink,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(40.0),
+                  bottomLeft: Radius.circular(40.0)),
+            ),
+            width: MediaQuery.of(context).size.width * 0.95,
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 15, 5, 5),
+                child: Text(
+                  '${userAccount.displayName}, ${userAccount.age}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: Colors.white),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(5, 0, 5, 15),
+                child: Text('${userAccount.shortBio}',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.white)),
+              ),
+            ]),
+          ),
+          if (withButtons)
+            SizedBox(
+                height: MediaQuery.of(context).size.height * 0.025,
+                width: MediaQuery.of(context).size.width),
+          if (withButtons)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    context.read<SwipeViewModel>().dislikeUser();
+                  },
+                  icon: const Icon(
+                    Icons.heart_broken_sharp,
+                    color: Palette.grape,
+                    size: 60.0,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    context.read<SwipeViewModel>().likeUser();
+                  },
+                  icon: const Icon(
+                    Icons.favorite_sharp,
+                    color: Palette.pink,
+                    size: 60.0,
+                  ),
+                ),
+              ],
+            ),
+        ])
+      ]));
 }

@@ -44,16 +44,26 @@ class ChatViewModel with ChangeNotifier {
   List<Chat> get currUserChats => _chats.where((element) => element.user1ID == "0").toList();
 
   void sendChat(Message message, String user1ID, String user2ID) {
-      // Update chat where logged in user is user1
-      Chat toUpdate = _chats.firstWhere((element) => element.user1ID == user1ID && element.user2ID == user2ID);
-      toUpdate.messages!.add(message);
-      upsertChat(toUpdate);
+    // Update chat where logged in user is user1
+    Chat toUpdate = _chats.firstWhere((element) => element.user1ID == user1ID && element.user2ID == user2ID);
+    toUpdate.messages!.add(message);
+    upsertChat(toUpdate);
 
-      // Update other one
-      toUpdate = _chats.firstWhere((element) => element.user1ID == user2ID && element.user2ID == user1ID);
-      toUpdate.messages!.add(message);
-      upsertChat(toUpdate);
-      notifyListeners();
+    // Update other one
+    toUpdate = _chats.firstWhere((element) => element.user1ID == user2ID && element.user2ID == user1ID);
+    toUpdate.messages!.add(message);
+    upsertChat(toUpdate);
+    notifyListeners();
+  }
+
+  void newChat(String user2ID){
+    Chat chat1 = Chat([], "0", user2ID);
+    Chat chat2 = Chat([], user2ID, "0");
+    _chats.add(chat1);
+    _chats.add(chat2);
+    upsertChat(chat1);
+    upsertChat(chat2);
+    notifyListeners();
   }
 
 }

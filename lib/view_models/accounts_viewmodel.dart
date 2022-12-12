@@ -42,9 +42,7 @@ class AccountViewModel extends ChangeNotifier {
     try {
       final newUser = await _firebaseAuth.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
-      if (newUser != null) {
-        _currentUser = newUser.user;
-      }
+      _currentUser = newUser.user;
     } catch (e) {
       print(e);
     }

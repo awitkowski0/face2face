@@ -9,6 +9,8 @@ import 'chat_view.dart';
 import 'package:face2face/palette/palette.dart';
 
 class MyHomePage extends StatefulWidget {
+  static const String routeName = "/";
+
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
@@ -37,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget buildNavigationBar() {
       return BottomNavigationBar(
         selectedItemColor: Palette.orchid,
-        backgroundColor: Palette.orange[200],
+        backgroundColor: Palette.pink,
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (int index) {
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // App bar for our application, should be the same on each screen
     PreferredSizeWidget buildAppBar() {
       return AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Palette.pink,
         title: Text(pages[_currentIndex]),
         leading: IconButton(
           alignment: Alignment.centerLeft,

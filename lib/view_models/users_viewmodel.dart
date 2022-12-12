@@ -48,7 +48,7 @@ Future<void> upsertUser(UserAccount user) async {
 }
 
 // Create a new photo for the user
-Future<Photo> createPhoto(Uint8List file) async {
+Future<void> createPhoto(Uint8List file) async {
   final user = getAccountUser();
   final uid = user.uniqueKey.toString();
   final ref = storage.ref().child('photos/$uid-${DateTime.now()}.jpeg');
@@ -56,7 +56,6 @@ Future<Photo> createPhoto(Uint8List file) async {
   await ref.putData(file, SettableMetadata(contentType: 'image/jpeg', customMetadata: {'name': 'photo'})).then((photo) {
     addPhoto(user, photo);
   });
-  return Photo(url: ref.fullPath, createdAt: DateTime.now().toString(), id: ref.fullPath);
 }
 
 // Add a photo to user.photos and update user
@@ -69,7 +68,7 @@ Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
 
 class UserViewModel with ChangeNotifier {
   // All chats (that will be displayed on the Home screen)
-  final List<UserAccount> _users = users;
+  late List<UserAccount> _users = users;
 
   //List<List<Chat>> _byName = [];
 
