@@ -15,7 +15,7 @@ void main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-  );
+  ).then((value) => populateUsers());
   runApp(const MyApp());
 }
 

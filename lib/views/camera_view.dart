@@ -47,6 +47,7 @@ class _CameraState extends State<CameraPage> {
         return Stack(children: [
           // Camera preview requires a controller
           CameraPreview(cameraController, child: Align(
+            // move to a separate stack, we'll set the camera preview as the backround image and the run a column over the stack
             alignment: Alignment.center,
             child: FloatingActionButton(
               onPressed: () {
@@ -57,6 +58,7 @@ class _CameraState extends State<CameraPage> {
           )),
         ]);
       } else {
+        // TODO: display some sort of error message or reask the user for camera access
         return const Center(child: CircularProgressIndicator());
       }
     }

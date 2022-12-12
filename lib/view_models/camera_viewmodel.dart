@@ -1,17 +1,31 @@
+import 'dart:collection';
+
 import 'package:camera/camera.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 
 class CameraViewModel extends ChangeNotifier {
-  late List<CameraDescription> _cameras;
+  late final List<CameraController> _cameras = [];
   late CameraController controller;
   late bool isInitialized = false;
 
+  Future<void> changeCameras() async {
+    if (_cameraMap.length > 1) {
+      notifyListeners();
+    }
+  }
+
   // Initialize cameras and camera controller
   Future<void> init() async {
-    _cameras = await availableCameras();
+    await availableCameras().then((value) => {
+      value.forEach((element) {
+        _cameraMap[element] = CameraController(element, ResolutionPreset.medium);
+        isInitialized = true;
+      })
+    }).then((value) => notifyListeners());
 
-    if (_cameras.isNotEmpty && !isInitialized) {
+    if (_cameraMap.isNotEmpty && !isInitialized) {
+      // we specify the camera we want to use here, and the resolution to it
       controller = CameraController(_cameras.last, ResolutionPreset.veryHigh);
 
       controller.initialize().then((_) {
