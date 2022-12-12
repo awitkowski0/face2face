@@ -62,9 +62,9 @@ class _CameraState extends State<CameraPage> {
       DateTime nextTime = lastTime.add(const Duration(hours: 8));
       DateTime currentTime = DateTime.now();
 
-      if (currentTime.subtract(lastTime).hour > nextTime.hour) {
+      //if (currentTime.subtract(lastTime).hour > nextTime.hour) {
 
-      }
+      //}
 
       Icon flashIcon;
 
@@ -83,12 +83,12 @@ class _CameraState extends State<CameraPage> {
         return Stack(children: [
           // Camera preview requires a controller
           Transform.scale(scale: 1.15, child: CameraPreview(cameraController)),
-          Column(
-          children: const [
-          Center(
-            child: Icon(Icons.hourglass_bottom, size: 300, color: Palette.orchid),
-          ),
-          Text('You have used your selfie!'),
+          Column(children: const [
+            Center(
+              child: Icon(Icons.hourglass_bottom,
+                  size: 300, color: Palette.orchid),
+            ),
+            Text('You have used your selfie!'),
             Text('Come back in...'),
             Text('Come back in...'),
           ]),
