@@ -1,14 +1,15 @@
 import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
+import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
-import 'package:face2face/view_models/authentication_viewmodel.dart';
 import 'package:face2face/view_models/swipe_viewmodel.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:face2face/views/main_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 
 void main() async {

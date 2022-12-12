@@ -16,9 +16,10 @@ class Photo {
       createdAt: json['createdAt'] as String,
     );
   }
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'url': url,
         'createdAt': createdAt,
-  };
+      };
 }

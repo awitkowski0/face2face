@@ -11,7 +11,8 @@ import '../models/user.dart';
 class AccountViewModel extends ChangeNotifier {
   final List<UserAccount> users = [];
   final _firestoreAuth = FirebaseStorage.instance;
-  final _firebaseAuth = FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.LOCAL);
+  final _firebaseAuth = FirebaseAuth.instanceFor(
+      app: Firebase.app(), persistence: Persistence.LOCAL);
 
   User? _currentUser = FirebaseAuth.instance.currentUser;
   final emailController = TextEditingController();
@@ -23,8 +24,9 @@ class AccountViewModel extends ChangeNotifier {
   /// Move to only populate "potential matches"
   Future<void> populateUsers() async {
     final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collection('users').get();
-    for (final QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+        await FirebaseFirestore.instance.collection('users').get();
+    for (final QueryDocumentSnapshot<Map<String, dynamic>> document
+        in querySnapshot.docs) {
       users.add(UserAccount.fromJson(document.data()));
     }
   }
@@ -35,7 +37,7 @@ class AccountViewModel extends ChangeNotifier {
 
     // populate chats @Matt
     populateChat();
-    notifyListeners();
+    //notifyListeners();
   }
 
   void createAccount() async {
@@ -47,7 +49,8 @@ class AccountViewModel extends ChangeNotifier {
       print(e);
     }
     authenticateAccount();
-    upsertUser(UserAccount(uniqueKey: _currentUser!.uid, displayName: _currentUser!.displayName));
+    upsertUser(UserAccount(
+        uniqueKey: _currentUser!.uid, displayName: _currentUser!.displayName));
   }
 
   // Authenticate the current user against the Firebase Authentication service.
@@ -55,8 +58,7 @@ class AccountViewModel extends ChangeNotifier {
     try {
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
           email: emailController.value.text,
-          password: passwordController.value.text
-      );
+          password: passwordController.value.text);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
@@ -65,9 +67,7 @@ class AccountViewModel extends ChangeNotifier {
       }
     }
 
-    _firebaseAuth
-        .authStateChanges()
-        .listen((User? user) {
+    _firebaseAuth.authStateChanges().listen((User? user) {
       if (user != null) {
         _currentUser = user;
       }

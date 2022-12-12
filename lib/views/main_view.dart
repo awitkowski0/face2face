@@ -1,3 +1,4 @@
+import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
 import 'package:face2face/views/authentication_view.dart';
 import 'package:face2face/views/swipe_view.dart';
@@ -6,7 +7,6 @@ import 'package:provider/provider.dart';
 
 import 'camera_view.dart';
 import 'chat_view.dart';
-import 'package:face2face/palette/palette.dart';
 
 class MyHomePage extends StatefulWidget {
   static const String routeName = "/";

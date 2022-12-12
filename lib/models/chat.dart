@@ -1,6 +1,3 @@
-
-
-
 class Chat {
   final List<Message>? messages;
   final String user1ID;
@@ -8,8 +5,8 @@ class Chat {
 
   Chat(this.messages, this.user1ID, this.user2ID);
 
-  factory Chat.fromJson(Map<String, dynamic> json) =>
-      _chatFromJson(json);
+  factory Chat.fromJson(Map<String, dynamic> json) => _chatFromJson(json);
+
   Map<String, dynamic> toJson() => _chatToJson(this);
 }
 
@@ -29,12 +26,13 @@ class Message {
       json['time'].toDate() as DateTime,
     );
   }
+
   Map<String, dynamic> toJson() => {
-    'senderID': senderID,
-    'receiverID': receiverID,
-    'message': message,
-    'time': time,
-  };
+        'senderID': senderID,
+        'receiverID': receiverID,
+        'message': message,
+        'time': time,
+      };
 }
 
 Chat _chatFromJson(Map<String, dynamic> json) {
@@ -48,10 +46,10 @@ Chat _chatFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _chatToJson(Chat chat) => {
-  'messages': _messageList(chat.messages),
-  'user1Name': chat.user1ID,
-  'user2Name': chat.user2ID,
-};
+      'messages': _messageList(chat.messages),
+      'user1Name': chat.user1ID,
+      'user2Name': chat.user2ID,
+    };
 
 List<Map<String, dynamic>>? _messageList(List<Message>? messages) {
   if (messages == null) {

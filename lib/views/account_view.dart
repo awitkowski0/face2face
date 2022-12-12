@@ -7,19 +7,19 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget buildBody(){
+    Widget buildBody() {
       return Container(
-        child: Column(
-          children: [
-            Text("Username: "),
-            Text("Email: "),
-            Text("Age: "),
-            Text("Gender: "),
-            Text("Interested in: ")
-          ],
-        )
-      );
+          child: Column(
+        children: [
+          Text("Username: "),
+          Text("Email: "),
+          Text("Age: "),
+          Text("Gender: "),
+          Text("Interested in: ")
+        ],
+      ));
     }
+
     PreferredSizeWidget _buildAppBar() {
       return AppBar(
         backgroundColor: Colors.transparent,
@@ -37,6 +37,7 @@ class AccountPage extends StatelessWidget {
         actions: const <Widget>[],
       );
     }
+
     return Scaffold(
       body: buildBody(),
       appBar: _buildAppBar(),

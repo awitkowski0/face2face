@@ -22,22 +22,22 @@ class SwipeViewModel extends ChangeNotifier {
 
   Future<void> forceUser(UserAccount userAccount) async {
     currentUser = userAccount;
-    currentUserPhotos = currentUser.photos!;
-    currentPhoto = currentUserPhotos[0];
+    currentUserPhotos = userAccount.photos!;
+    currentPhoto = userAccount.photos![0];
     photoIndex = 0;
     index = 0;
-
-    notifyListeners();
   }
 
   Future<void> likeUser() async {
     nextUser();
     // TODO: match storing
   }
+
   Future<void> dislikeUser() async {
     nextUser();
     // TODO: not matching
   }
+
   Future<void> nextUser() async {
     if (potentialMatches.length > (index + 1)) {
       currentUser = potentialMatches[index + 1];
@@ -48,17 +48,23 @@ class SwipeViewModel extends ChangeNotifier {
     // TODO: add a condition if there's none
     // TODO: add an "end of stack" card
   }
+
   Future<void> lastPhoto() async {
-    if (currentUserPhotos.isNotEmpty && currentUserPhotos.length > (photoIndex - 1)) {
+    if (currentUserPhotos.isNotEmpty &&
+        currentUserPhotos.length > (photoIndex - 1)) {
       currentPhoto = currentUserPhotos[photoIndex - 1];
       photoIndex -= 1;
+      print('last photo');
       notifyListeners();
     }
   }
+
   Future<void> nextPhoto() async {
-    if (currentUserPhotos.isNotEmpty && currentUserPhotos.length > (photoIndex + 1)) {
+    if (currentUserPhotos.isNotEmpty &&
+        currentUserPhotos.length > (photoIndex + 1)) {
       currentPhoto = currentUserPhotos[photoIndex + 1];
       photoIndex += 1;
+      print('next photo');
       notifyListeners();
     }
   }

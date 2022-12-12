@@ -43,7 +43,8 @@ class _SwipePage extends State<SwipePage> {
           Provider.of<SwipeViewModel>(context, listen: true).potentialMatches;
       UserAccount currentUser =
           Provider.of<SwipeViewModel>(context, listen: true).currentUser;
-      Photo currentPhoto = Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
+      Photo currentPhoto =
+          Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
 
       if (cardValues.isNotEmpty) {
         return buildCardForUser(context, currentUser, true, currentPhoto);
@@ -57,7 +58,8 @@ class _SwipePage extends State<SwipePage> {
   }
 }
 
-Widget buildCardForUser(BuildContext context, UserAccount userAccount, bool withButtons, Photo photo) {
+Widget buildCardForUser(BuildContext context, UserAccount userAccount,
+    bool withButtons, Photo photo) {
   return Scaffold(
       extendBody: true,
       body: Stack(children: [
@@ -65,18 +67,19 @@ Widget buildCardForUser(BuildContext context, UserAccount userAccount, bool with
           Center(
               heightFactor: 1.075,
               child:
-              // SizedBox(
-              Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Palette.pink, width: 5),
-                    borderRadius: const BorderRadius.all(Radius.circular(40.0)),
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.625,
-                  width: MediaQuery.of(context).size.width * 0.95,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: Image.network('${photo.url}.jpeg',
-                          fit: BoxFit.cover)))),
+                  // SizedBox(
+                  Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Palette.pink, width: 5),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(40.0)),
+                      ),
+                      height: MediaQuery.of(context).size.height * 0.625,
+                      width: MediaQuery.of(context).size.width * 0.95,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: Image.network('${photo.url}.jpeg',
+                              fit: BoxFit.cover)))),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.560,
             width: MediaQuery.of(context).size.width * 0.95,
@@ -86,7 +89,8 @@ Widget buildCardForUser(BuildContext context, UserAccount userAccount, bool with
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: GestureDetector(
                     onTap: () {
-                      Provider.of<SwipeViewModel>(context, listen: false).lastPhoto();
+                      Provider.of<SwipeViewModel>(context, listen: false)
+                          .lastPhoto();
                     },
                   )),
               SizedBox(
@@ -94,7 +98,8 @@ Widget buildCardForUser(BuildContext context, UserAccount userAccount, bool with
                   width: MediaQuery.of(context).size.width * 0.45,
                   child: GestureDetector(
                     onTap: () {
-                      Provider.of<SwipeViewModel>(context, listen: false).nextPhoto();
+                      Provider.of<SwipeViewModel>(context, listen: false)
+                          .nextPhoto();
                     },
                   ))
             ]),

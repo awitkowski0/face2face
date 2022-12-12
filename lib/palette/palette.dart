@@ -4,16 +4,16 @@ final ThemeData defaultTheme = ThemeData(
     brightness: Brightness.light,
     primaryColor: Palette.grape[500],
     scaffoldBackgroundColor: Palette.mauve,
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Palette.pink).copyWith(secondary: Palette.orange[500])
-);
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Palette.pink)
+        .copyWith(secondary: Palette.orange[500]));
 
 // the 500 value of any color is the primary color. all others are shades
 // <500 is lighter, >500 is darker.
 class Palette {
   Palette._();
 
-
-  static const MaterialColor orange = MaterialColor(_orangePrimaryValue, <int, Color>{
+  static const MaterialColor orange =
+      MaterialColor(_orangePrimaryValue, <int, Color>{
     50: Color(0xFFFEF3EB),
     100: Color(0xFFFDE2CE),
     200: Color(0xFFFCCFAD),
@@ -27,7 +27,8 @@ class Palette {
   });
   static const int _orangePrimaryValue = 0xFFF89F5B;
 
-  static const MaterialColor pink = MaterialColor(_pinkPrimaryValue, <int, Color>{
+  static const MaterialColor pink =
+      MaterialColor(_pinkPrimaryValue, <int, Color>{
     50: Color(0xFFFCE8EE),
     100: Color(0xFFF7C5D4),
     200: Color(0xFFF29FB8),
@@ -41,8 +42,8 @@ class Palette {
   });
   static const int _pinkPrimaryValue = 0xFFE53F71;
 
-
-  static const MaterialColor orchid = MaterialColor(_orchidPrimaryValue, <int, Color>{
+  static const MaterialColor orchid =
+      MaterialColor(_orchidPrimaryValue, <int, Color>{
     50: Color(0xFFF3E7F1),
     100: Color(0xFFE1C2DB),
     200: Color(0xFFCE9AC3),
@@ -56,8 +57,8 @@ class Palette {
   });
   static const int _orchidPrimaryValue = 0xFF9C3587;
 
-
-  static const MaterialColor mauve = MaterialColor(_mauvePrimaryValue, <int, Color>{
+  static const MaterialColor mauve =
+      MaterialColor(_mauvePrimaryValue, <int, Color>{
     50: Color(0xFFEDE7F0),
     100: Color(0xFFD1C3D9),
     200: Color(0xFFB29BC0),
@@ -71,8 +72,8 @@ class Palette {
   });
   static const int _mauvePrimaryValue = 0xFF653780;
 
-
-  static const MaterialColor grape = MaterialColor(_grapePrimaryValue, <int, Color>{
+  static const MaterialColor grape =
+      MaterialColor(_grapePrimaryValue, <int, Color>{
     50: Color(0xFFE8E3EA),
     100: Color(0xFFC5B9CB),
     200: Color(0xFF9F8BA8),

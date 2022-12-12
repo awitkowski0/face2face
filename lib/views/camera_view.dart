@@ -33,8 +33,6 @@ class _CameraState extends State<CameraPage> {
 
     if (!isInit) {
       cameraViewModel.init();
-      swipeViewModel.init();
-      print('user: ' + cameraViewModel.getCurrentUser().toString());
       swipeViewModel.forceUser(cameraViewModel.getCurrentUser());
     }
     super.initState();
@@ -53,42 +51,81 @@ class _CameraState extends State<CameraPage> {
           Provider.of<CameraViewModel>(context, listen: true).controller;
       shouldPreview =
           Provider.of<CameraViewModel>(context, listen: true).isPreviewReady;
+      FlashMode flashMode =
+          Provider.of<CameraViewModel>(context, listen: true).flashMode;
       UserAccount userAccount =
           Provider.of<CameraViewModel>(context, listen: true).getCurrentUser();
-      Photo photo =
-          Provider.of<CameraViewModel>(context, listen: true).getCurrentPhoto();
+      currentPhoto =
+          Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
+      DateTime lastTime =
+          Provider.of<CameraViewModel>(context, listen: true).getLastPhotoTime();
+      DateTime nextTime = lastTime.add(const Duration(hours: 8));
+      DateTime currentTime = DateTime.now();
 
+      if (currentTime.subtract(lastTime).hour > nextTime.hour) {
+
+      }
+
+      Icon flashIcon;
+
+      if (flashMode == FlashMode.off) {
+        flashIcon = const Icon(Icons.flash_off);
+      } else {
+        if (flashMode == FlashMode.auto) {
+          flashIcon = const Icon(Icons.flash_auto);
+        } else {
+          flashIcon = const Icon(Icons.flash_on);
+        }
+      }
       if (!shouldPreview && cameraController.value.isInitialized) {
-        cameraController.setFlashMode(FlashMode.always);
-        cameraController.setFocusMode(FocusMode.auto);
-        cameraController.setZoomLevel(0.5);
+        cameraController.setFlashMode(flashMode);
 
         return Stack(children: [
           // Camera preview requires a controller
-          CameraPreview(cameraController,
-              child: Align(
-                  // move to a separate stack, we'll set the camera preview as the backround image and the run a column over the stack
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      FloatingActionButton(
-                        onPressed: () {
-                          context.read<CameraViewModel>().takePicture();
-                        },
-                        child: const Icon(Icons.camera_outlined),
-                      ),
-                      FloatingActionButton(
-                        onPressed: () {
-                          context.read<CameraViewModel>().changeCameras();
-                        },
-                        child: const Icon(Icons.cached_outlined),
-                      ),
-                    ],
-                  ))),
+          Transform.scale(scale: 1.15, child: CameraPreview(cameraController)),
+          Column(
+          children: const [
+          Center(
+            child: Icon(Icons.hourglass_bottom, size: 300, color: Palette.orchid),
+          ),
+          Text('You have used your selfie!'),
+            Text('Come back in...'),
+            Text('Come back in...'),
+          ]),
+          Column(
+            children: [
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.68,
+                  width: MediaQuery.of(context).size.width),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      context.read<CameraViewModel>().changeCameras();
+                    },
+                    child: const Icon(Icons.cached_outlined),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      context.read<CameraViewModel>().takePicture();
+                    },
+                    child: const Icon(Icons.camera_outlined),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      context.read<CameraViewModel>().switchFlash();
+                    },
+                    child: flashIcon,
+                  ),
+                ],
+              ),
+            ],
+          )
         ]);
       } else if (shouldPreview) {
         return Stack(children: [
-          buildCardForUser(context, userAccount, false, photo),
+          buildCardForUser(context, userAccount, false, currentPhoto),
           Column(children: [
             SizedBox(
                 height: MediaQuery.of(context).size.height * 0.675,
