@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
@@ -57,14 +59,6 @@ class _CameraState extends State<CameraPage> {
           Provider.of<CameraViewModel>(context, listen: true).getCurrentUser();
       currentPhoto =
           Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
-      DateTime lastTime =
-          Provider.of<CameraViewModel>(context, listen: true).getLastPhotoTime();
-      DateTime nextTime = lastTime.add(const Duration(hours: 8));
-      DateTime currentTime = DateTime.now();
-
-      //if (currentTime.subtract(lastTime).hour > nextTime.hour) {
-
-      //}
 
       Icon flashIcon;
 
@@ -83,72 +77,10 @@ class _CameraState extends State<CameraPage> {
         return Stack(children: [
           // Camera preview requires a controller
           Transform.scale(scale: 1.15, child: CameraPreview(cameraController)),
-          Column(children: const [
-            Center(
-              child: Icon(Icons.hourglass_bottom,
-                  size: 300, color: Palette.orchid),
-            ),
-            Text('You have used your selfie!'),
-            Text('Come back in...'),
-            Text('Come back in...'),
-          ]),
-          Column(
-            children: [
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.68,
-                  width: MediaQuery.of(context).size.width),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      context.read<CameraViewModel>().changeCameras();
-                    },
-                    child: const Icon(Icons.cached_outlined),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      context.read<CameraViewModel>().takePicture();
-                    },
-                    child: const Icon(Icons.camera_outlined),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      context.read<CameraViewModel>().switchFlash();
-                    },
-                    child: flashIcon,
-                  ),
-                ],
-              ),
-            ],
-          )
+          buttons(context, flashIcon, false),
         ]);
       } else if (shouldPreview) {
-        return Stack(children: [
-          buildCardForUser(context, userAccount, false, currentPhoto),
-          Column(children: [
-            SizedBox(
-                height: MediaQuery.of(context).size.height * 0.675,
-                width: MediaQuery.of(context).size.width),
-            TextButton(
-              onPressed: () {
-                context.read<CameraViewModel>().discardPreview();
-              },
-              child: Container(
-                  height: 40,
-                  width: 350,
-                  decoration: BoxDecoration(
-                      color: Palette.pink,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: const Text('Exit Preview',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center)),
-            ),
-          ]),
-        ]);
+        return preview(context, userAccount, currentPhoto);
       } else {
         return const Center(child: CircularProgressIndicator());
       }
@@ -156,6 +88,81 @@ class _CameraState extends State<CameraPage> {
 
     return buildCameraPreview();
   }
+}
+
+Widget buttons(BuildContext context, Icon flashIcon, bool cooldown) {
+  if (cooldown) {
+    return Column(children: const [
+      Center(
+        child: Icon(Icons.hourglass_bottom, size: 300, color: Palette.orchid),
+      ),
+      Text('You have used your selfie!'),
+      Text('Come back in...')
+    ]);
+  } else {
+    return camera(context, flashIcon);
+  }
+}
+
+Widget camera(BuildContext context, Icon flashIcon) {
+  return Column(
+    children: [
+      SizedBox(
+          height: MediaQuery.of(context).size.height * 0.68,
+          width: MediaQuery.of(context).size.width),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              context.read<CameraViewModel>().changeCameras();
+            },
+            child: const Icon(Icons.cached_outlined),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              context.read<CameraViewModel>().takePicture();
+            },
+            child: const Icon(Icons.camera_outlined),
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              context.read<CameraViewModel>().switchFlash();
+            },
+            child: flashIcon,
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+Widget preview(
+    BuildContext context, UserAccount userAccount, Photo currentPhoto) {
+  return Stack(children: [
+    buildCardForUser(context, userAccount, false, currentPhoto),
+    Column(children: [
+      SizedBox(
+          height: MediaQuery.of(context).size.height * 0.675,
+          width: MediaQuery.of(context).size.width),
+      TextButton(
+        onPressed: () {
+          context.read<CameraViewModel>().discardPreview();
+        },
+        child: Container(
+            height: 40,
+            width: 350,
+            decoration: BoxDecoration(
+                color: Palette.pink, borderRadius: BorderRadius.circular(50)),
+            child: const Text('Exit Preview',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center)),
+      ),
+    ]),
+  ]);
 }
 
 /// Returns a suitable camera icon for [direction].

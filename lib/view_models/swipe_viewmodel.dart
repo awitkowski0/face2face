@@ -10,6 +10,9 @@ class SwipeViewModel extends ChangeNotifier {
   late List<Photo> currentUserPhotos;
   late Photo currentPhoto;
   late int photoIndex;
+  late List<UserAccount> dislikedUsers;
+  late List<UserAccount> likedUsers;
+  late bool endOfStack = false;
 
   Future<void> init() async {
     potentialMatches = users;
@@ -29,11 +32,13 @@ class SwipeViewModel extends ChangeNotifier {
   }
 
   Future<void> likeUser() async {
+    likedUsers.add(currentUser);
     nextUser();
     // TODO: match storing
   }
 
   Future<void> dislikeUser() async {
+    dislikedUsers.add(currentUser);
     nextUser();
     // TODO: not matching
   }
@@ -43,10 +48,10 @@ class SwipeViewModel extends ChangeNotifier {
       currentUser = potentialMatches[index + 1];
       currentUserPhotos = currentUser.photos!;
       index += 1;
-      notifyListeners();
+    } else {
+      endOfStack = true;
     }
-    // TODO: add a condition if there's none
-    // TODO: add an "end of stack" card
+    notifyListeners();
   }
 
   Future<void> lastPhoto() async {
@@ -54,7 +59,6 @@ class SwipeViewModel extends ChangeNotifier {
         currentUserPhotos.length > (photoIndex - 1)) {
       currentPhoto = currentUserPhotos[photoIndex - 1];
       photoIndex -= 1;
-      print('last photo');
       notifyListeners();
     }
   }
@@ -64,7 +68,6 @@ class SwipeViewModel extends ChangeNotifier {
         currentUserPhotos.length > (photoIndex + 1)) {
       currentPhoto = currentUserPhotos[photoIndex + 1];
       photoIndex += 1;
-      print('next photo');
       notifyListeners();
     }
   }

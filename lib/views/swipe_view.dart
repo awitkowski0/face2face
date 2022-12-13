@@ -45,13 +45,30 @@ class _SwipePage extends State<SwipePage> {
           Provider.of<SwipeViewModel>(context, listen: true).currentUser;
       Photo currentPhoto =
           Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
+      bool endOfStack =
+          Provider.of<SwipeViewModel>(context, listen: true).endOfStack;
 
-      if (cardValues.isNotEmpty) {
+      if (cardValues.isNotEmpty && !endOfStack) {
         return buildCardForUser(context, currentUser, true, currentPhoto);
       } else {
-        // TODO: Empty "end of card" sad card
-        return const Center(child: CircularProgressIndicator());
-      }
+        // END OF CARD STACK
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+
+          children: const <Widget>[
+            Icon(
+              Icons.sentiment_dissatisfied_rounded,
+              size: 80,
+              color: Palette.mauve,
+            ),
+
+            Text(
+                'You have already swiped through all potential matches! Chat a match or come back later.',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 35, color: Palette.grape)),
+
+          ],
+        );      }
     }
 
     return buildCards();

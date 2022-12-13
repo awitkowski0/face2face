@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,23 @@ class CameraViewModel extends ChangeNotifier {
   late CameraController controller;
   late int _currentCamera = 0;
   late FlashMode flashMode = FlashMode.off;
+  late Timer timer;
+
+  // Initialize cameras and camera controller
+  Future<void> init() async {
+    _currentCamera = 0;
+
+    await availableCameras()
+        .then((value) => {
+              value.forEach((element) {
+                _cameras.add(CameraController(element, ResolutionPreset.high));
+              })
+            })
+        .then((value) => {
+              controller = _cameras[_currentCamera],
+              controller.initialize().then((value) => notifyListeners())
+            });
+  }
 
   getLastPhotoTime() {
     return users[0].photos![0].createdAt;
@@ -44,23 +63,6 @@ class CameraViewModel extends ChangeNotifier {
       _currentCamera = 0;
     }
     controller.initialize().then((value) => notifyListeners());
-  }
-
-  // Initialize cameras and camera controller
-  Future<void> init() async {
-    _currentCamera = 0;
-
-    await availableCameras()
-        .then((value) => {
-              value.forEach((element) {
-                _cameras
-                    .add(CameraController(element, ResolutionPreset.high));
-              })
-            })
-        .then((value) => {
-              controller = _cameras[_currentCamera],
-              controller.initialize().then((value) => notifyListeners())
-            });
   }
 
   Future<void> discardPreview() async {
