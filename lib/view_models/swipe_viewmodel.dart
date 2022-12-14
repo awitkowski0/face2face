@@ -24,17 +24,17 @@ class SwipeViewModel extends ChangeNotifier {
 
     // Remove current user from potential matches
     for (int i = 0; i < potentialMatches.length; i++) {
-      if (potentialMatches[i].uniqueKey == currentUser.uniqueKey) {
+      if (potentialMatches[i].uniqueKey == getAccountUser().uniqueKey) {
         potentialMatches.removeAt(i);
       }
     }
   }
 
-  Future<void> forceUser(UserAccount userAccount) async {
-    currentUser = userAccount;
+  Future<void> forceUser() async {
+    currentUser = getAccountUser();
 
-    if (userAccount.photos != null) {
-      currentUserPhotos = userAccount.photos!;
+    if (currentUser.photos != null) {
+      currentUserPhotos = currentUser.photos!;
       currentPhoto = currentUserPhotos[0];
     } else {
       currentUserPhotos = [];

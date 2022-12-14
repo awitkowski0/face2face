@@ -23,7 +23,7 @@ Future<void> populateUsers() async {
 
 // Get the current user
 UserAccount getAccountUser() {
-  var user = getCurrentUser();
+  User user = getCurrentUser();
 
   return users.firstWhere((element) => element.uniqueKey == user.uid);
 }
@@ -70,7 +70,7 @@ Future<void> addPhoto(UserAccount user, TaskSnapshot photo) async {
       Photo(
           url: url, createdAt: DateTime.now().toString(), id: photo.ref.name));
 
-  upsertUser(user);
+  upsertUser(UserAccount(uniqueKey: user.uniqueKey, displayName: user.displayName, shortBio: user.shortBio, age: user.age, occupation: user.occupation, major: user.major, photos: user.photos));
 }
 
 class UserViewModel with ChangeNotifier {

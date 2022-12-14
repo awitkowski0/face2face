@@ -35,7 +35,7 @@ class _CameraState extends State<CameraPage> {
 
     if (!isInit) {
       cameraViewModel.init();
-      swipeViewModel.forceUser(cameraViewModel.getCurrentUser());
+      swipeViewModel.forceUser();
     }
     super.initState();
   }

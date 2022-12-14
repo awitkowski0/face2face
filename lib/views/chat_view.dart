@@ -123,6 +123,10 @@ class _ChatState extends State<ChatPage> {
                               context
                                   .read<ChatViewModel>()
                                   .newChat(found.uniqueKey);
+                              setState(() {
+                                _page = 1;
+                                _userIndex = found.uniqueKey;
+                              });
                             }
                             chatController.text = "";
                           }

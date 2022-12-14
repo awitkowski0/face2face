@@ -35,6 +35,7 @@ class AccountViewModel extends ChangeNotifier {
         in querySnapshot.docs) {
       users.add(UserAccount.fromJson(document.data()));
     }
+    notifyListeners();
   }
 
   // init firebase, attempt to authenticate the user
@@ -42,7 +43,6 @@ class AccountViewModel extends ChangeNotifier {
     populateUsers();
 
     // populate chats @Matt
-    populateChat();
     //notifyListeners();
   }
 
@@ -57,6 +57,7 @@ class AccountViewModel extends ChangeNotifier {
     authenticateAccount();
     upsertUser(UserAccount(
         uniqueKey: _currentUser!.uid, displayName: _currentUser!.displayName));
+    notifyListeners();
   }
 
   void modifyUser() async {
@@ -66,8 +67,10 @@ class AccountViewModel extends ChangeNotifier {
         displayName: displayNameController.text ?? user.displayName,
         shortBio: bioController.text ?? user.shortBio,
         major: majorController.text ?? user.major,
-        occupation: occupationController.text ?? user.occupation
+        occupation: occupationController.text ?? user.occupation,
+        photos: user.photos
     ));
+    notifyListeners();
   }
   // Authenticate the current user against the Firebase Authentication service.
   void authenticateAccount() async {
@@ -81,6 +84,7 @@ class AccountViewModel extends ChangeNotifier {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+      notifyListeners();
     }
 
     _firebaseAuth.authStateChanges().listen((User? user) {

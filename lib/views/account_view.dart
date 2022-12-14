@@ -57,6 +57,13 @@ class AccountPage extends StatelessWidget {
             Provider.of<AccountViewModel>(context, listen: false).modifyUser();
             Navigator.pushNamed(context, MyHomePage.routeName);
           },
+          child: const Text('Save Profile'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Provider.of<AccountViewModel>(context, listen: false).modifyUser();
+            Navigator.pushNamed(context, MyHomePage.routeName);
+          },
           child: const Text('Go Home'),
         ),
       ],
