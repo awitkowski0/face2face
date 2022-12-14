@@ -80,7 +80,8 @@ class _CameraState extends State<CameraPage> {
           Transform.scale(scale: 1.15, child: CameraPreview(cameraController)),
           buttons(context, flashIcon, false),
         ]);
-      } else if (shouldPreview) {
+        // BUG: The camera preview will not always show
+      } else if (shouldPreview && currentPhoto != null) {
         return preview(context, userAccount, currentPhoto!);
       } else {
         return const Center(child: CircularProgressIndicator());

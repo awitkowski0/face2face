@@ -60,7 +60,6 @@ class SwipeViewModel extends ChangeNotifier {
     } else {
       endOfStack = true;
     }
-    notifyListeners();
   }
 
   Future<void> lastPhoto() async {
