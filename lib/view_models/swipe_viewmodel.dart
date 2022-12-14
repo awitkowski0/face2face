@@ -4,15 +4,16 @@ import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 
 class SwipeViewModel extends ChangeNotifier {
-  late List<UserAccount> potentialMatches;
+  late List<UserAccount> potentialMatches = [];
   late UserAccount currentUser;
   late int index;
   late List<Photo> currentUserPhotos;
   late Photo? currentPhoto = null;
   late int photoIndex;
-  late List<UserAccount> dislikedUsers;
-  late List<UserAccount> likedUsers;
+  late List<UserAccount> dislikedUsers = [];
+  late List<UserAccount> likedUsers = [];
   late bool endOfStack = false;
+  late bool isPhotoReady = false;
 
   Future<void> init() async {
     potentialMatches = users;
@@ -21,13 +22,6 @@ class SwipeViewModel extends ChangeNotifier {
     currentPhoto = currentUserPhotos[0];
     photoIndex = 0;
     index = 0;
-
-    // Remove current user from potential matches
-    for (int i = 0; i < potentialMatches.length; i++) {
-      if (potentialMatches[i].uniqueKey == getAccountUser().uniqueKey) {
-        potentialMatches.removeAt(i);
-      }
-    }
   }
 
   Future<void> forceUser() async {
@@ -42,6 +36,7 @@ class SwipeViewModel extends ChangeNotifier {
     }
     photoIndex = 0;
     index = 0;
+    notifyListeners();
   }
 
   Future<void> likeUser() async {
@@ -60,6 +55,7 @@ class SwipeViewModel extends ChangeNotifier {
     if (potentialMatches.length > (index + 1)) {
       currentUser = potentialMatches[index + 1];
       currentUserPhotos = currentUser.photos!;
+      currentPhoto = currentUserPhotos[0];
       index += 1;
     } else {
       endOfStack = true;

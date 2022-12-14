@@ -44,6 +44,11 @@ Future<void> upsertUser(UserAccount user) async {
       .doc(user.uniqueKey.toString())
       .set(user.toJson())
       .onError((error, stackTrace) => print(stackTrace));
+  if (!users.contains(user)) {
+    users.add(user);
+  } else {
+    users[users.indexOf(user)] = user;
+  }
 }
 
 // Create a new photo for the user

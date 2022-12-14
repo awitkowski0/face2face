@@ -48,8 +48,8 @@ class _SwipePage extends State<SwipePage> {
       bool endOfStack =
           Provider.of<SwipeViewModel>(context, listen: true).endOfStack;
 
-      if (cardValues.isNotEmpty && !endOfStack) {
-        return buildCardForUser(context, currentUser, true, currentPhoto!);
+      if (cardValues.isNotEmpty && !endOfStack && currentPhoto != null) {
+        return buildCardForUser(context, currentUser, true, currentPhoto);
       } else {
         // END OF CARD STACK
         return Column(

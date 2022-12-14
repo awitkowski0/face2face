@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:camera/camera.dart';
 import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/camera_viewmodel.dart';
+import 'package:face2face/view_models/users_viewmodel.dart';
 import 'package:face2face/views/swipe_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -121,7 +122,7 @@ Widget camera(BuildContext context, Icon flashIcon) {
           ),
           FloatingActionButton(
             onPressed: () {
-              context.read<CameraViewModel>().takePicture();
+              context.read<CameraViewModel>().takePicture().then((value) => context.read<SwipeViewModel>().forceUser());
             },
             child: const Icon(Icons.camera_outlined),
           ),

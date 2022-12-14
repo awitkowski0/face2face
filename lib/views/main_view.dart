@@ -20,7 +20,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 1;
-  final List<String> pages = <String>['Chat', 'Camera', 'Swipe'];
+  final List<String> pages = <String>['Chat', 'Camera', 'Match'];
 
   @override
   void initState() {
