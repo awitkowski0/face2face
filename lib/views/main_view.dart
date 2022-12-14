@@ -1,5 +1,6 @@
 import 'package:face2face/palette/palette.dart';
 import 'package:face2face/view_models/accounts_viewmodel.dart';
+import 'package:face2face/views/account_view.dart';
 import 'package:face2face/views/authentication_view.dart';
 import 'package:face2face/views/swipe_view.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Provider.of<AccountViewModel>(context, listen: false).signOut();
+            Navigator.pushNamed(context, AccountPage.routeName);
             // Respond to button press
           },
         ),

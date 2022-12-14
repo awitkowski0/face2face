@@ -43,13 +43,13 @@ class _SwipePage extends State<SwipePage> {
           Provider.of<SwipeViewModel>(context, listen: true).potentialMatches;
       UserAccount currentUser =
           Provider.of<SwipeViewModel>(context, listen: true).currentUser;
-      Photo currentPhoto =
+      Photo? currentPhoto =
           Provider.of<SwipeViewModel>(context, listen: true).currentPhoto;
       bool endOfStack =
           Provider.of<SwipeViewModel>(context, listen: true).endOfStack;
 
       if (cardValues.isNotEmpty && !endOfStack) {
-        return buildCardForUser(context, currentUser, true, currentPhoto);
+        return buildCardForUser(context, currentUser, true, currentPhoto!);
       } else {
         // END OF CARD STACK
         return Column(

@@ -17,6 +17,12 @@ class AccountViewModel extends ChangeNotifier {
   User? _currentUser = FirebaseAuth.instance.currentUser;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final repeatPasswordController = TextEditingController();
+  final displayNameController = TextEditingController();
+  final bioController = TextEditingController();
+  final ageController = TextEditingController();
+  final majorController = TextEditingController();
+  final occupationController = TextEditingController();
 
   bool get isInitialized => (_firestoreAuth.bucket.isNotEmpty);
 
@@ -53,6 +59,16 @@ class AccountViewModel extends ChangeNotifier {
         uniqueKey: _currentUser!.uid, displayName: _currentUser!.displayName));
   }
 
+  void modifyUser() async {
+    UserAccount user = getAccountUser();
+    upsertUser(UserAccount(
+        uniqueKey: user.uniqueKey,
+        displayName: displayNameController.text ?? user.displayName,
+        shortBio: bioController.text ?? user.shortBio,
+        major: majorController.text ?? user.major,
+        occupation: occupationController.text ?? user.occupation
+    ));
+  }
   // Authenticate the current user against the Firebase Authentication service.
   void authenticateAccount() async {
     try {

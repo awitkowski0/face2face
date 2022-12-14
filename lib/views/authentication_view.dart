@@ -1,3 +1,4 @@
+import 'package:face2face/views/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,35 +30,26 @@ class _AuthenticationState extends State<AuthenticationPage> {
           TextFormField(
             controller: context.read<AccountViewModel>().emailController,
             decoration: const InputDecoration(
-              labelText: 'First Name',
-            ),
-          ),
-          TextFormField(
-            controller: context.read<AccountViewModel>().emailController,
-            decoration: const InputDecoration(
-              labelText: 'First Name',
-            ),
-          ),
-          TextFormField(
-            controller: context.read<AccountViewModel>().emailController,
-            decoration: const InputDecoration(
               labelText: 'Email',
             ),
           ),
           TextFormField(
             controller: context.read<AccountViewModel>().passwordController,
+            obscureText: true,
             decoration: const InputDecoration(
               labelText: 'Password',
             ),
           ),
           TextFormField(
-            controller: context.read<AccountViewModel>().passwordController,
+            controller: context.read<AccountViewModel>().repeatPasswordController,
+            obscureText: true,
             decoration: const InputDecoration(
               labelText: 'Repeat Password',
             ),
           ),
           ElevatedButton(
             onPressed: () {
+              Navigator.pushNamed(context, WelcomePage.routeName);
               Provider.of<AccountViewModel>(context, listen: false)
                   .createAccount();
             },

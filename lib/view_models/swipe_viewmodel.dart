@@ -8,7 +8,7 @@ class SwipeViewModel extends ChangeNotifier {
   late UserAccount currentUser;
   late int index;
   late List<Photo> currentUserPhotos;
-  late Photo currentPhoto;
+  late Photo? currentPhoto = null;
   late int photoIndex;
   late List<UserAccount> dislikedUsers;
   late List<UserAccount> likedUsers;
@@ -21,12 +21,25 @@ class SwipeViewModel extends ChangeNotifier {
     currentPhoto = currentUserPhotos[0];
     photoIndex = 0;
     index = 0;
+
+    // Remove current user from potential matches
+    for (int i = 0; i < potentialMatches.length; i++) {
+      if (potentialMatches[i].uniqueKey == currentUser.uniqueKey) {
+        potentialMatches.removeAt(i);
+      }
+    }
   }
 
   Future<void> forceUser(UserAccount userAccount) async {
     currentUser = userAccount;
-    currentUserPhotos = userAccount.photos!;
-    currentPhoto = userAccount.photos![0];
+
+    if (userAccount.photos != null) {
+      currentUserPhotos = userAccount.photos!;
+      currentPhoto = currentUserPhotos[0];
+    } else {
+      currentUserPhotos = [];
+      currentPhoto = null;
+    }
     photoIndex = 0;
     index = 0;
   }

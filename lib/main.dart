@@ -5,7 +5,9 @@ import 'package:face2face/view_models/camera_viewmodel.dart';
 import 'package:face2face/view_models/chat_viewmodel.dart';
 import 'package:face2face/view_models/swipe_viewmodel.dart';
 import 'package:face2face/view_models/users_viewmodel.dart';
+import 'package:face2face/views/account_view.dart';
 import 'package:face2face/views/main_view.dart';
+import 'package:face2face/views/welcome_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,11 +38,16 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => SwipeViewModel()),
         ],
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'face2face',
           theme: ThemeData(
             primarySwatch: Palette.orchid,
           ),
-          home: const MyHomePage(),
+          routes: {
+            MyHomePage.routeName: (context) => const MyHomePage(),
+            WelcomePage.routeName: (context) => const WelcomePage(),
+            AccountPage.routeName: (context) => const AccountPage(),
+          },
         ));
   }
 }

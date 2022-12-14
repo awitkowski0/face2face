@@ -56,12 +56,12 @@ class UserAccount {
 UserAccount _userFromJson(Map<String, dynamic> json) {
   return UserAccount(
     uniqueKey: json['uniqueKey'] as String,
-    displayName: json['displayName'] as String ?? 'No Name',
-    shortBio: json['shortBio'] as String ?? 'No Bio',
-    major: json['major'] as String ?? 'No Major',
-    occupation: json['occupation'] as String ?? 'No Occupation',
-    pronouns: json['pronouns'] as String ?? 'No Pronouns',
-    age: json['age'] as int ?? 0,
+    displayName: json['displayName'] as String ?? '',
+    shortBio: json['shortBio'] as String ?? '',
+    major: json['major'] as String ?? '',
+    occupation: json['occupation'] as String ?? '',
+    pronouns: json['pronouns'] as String ?? '',
+    age: json['age'] as int ?? 18,
     photos: (json['photos'] as List<dynamic>)
             .map((dynamic e) => Photo.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -72,17 +72,17 @@ UserAccount _userFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _userToJson(UserAccount user) => {
       'uniqueKey': user.uniqueKey,
       'photos': _photoList(user.photos) ?? [],
-      'displayName': user.displayName ?? 'No Name',
-      'shortBio': user.shortBio ?? 'No Bio',
-      'major': user.major ?? 'No Major',
-      'occupation': user.occupation ?? 'No Occupation',
-      'pronouns': user.pronouns ?? 'No Pronouns',
-      'age': user.age ?? 0,
+      'displayName': user.displayName ?? '',
+      'shortBio': user.shortBio ?? '',
+      'major': user.major ?? '',
+      'occupation': user.occupation ?? '',
+      'pronouns': user.pronouns ?? '',
+      'age': user.age ?? 18,
     };
 
 List<Map<String, dynamic>>? _photoList(List<Photo>? photos) {
   if (photos == null) {
-    return null;
+    return [];
   }
   final photoMap = <Map<String, dynamic>>[];
   for (var photo in photos) {

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../view_models/accounts_viewmodel.dart';
+import 'main_view.dart';
 
 class AccountPage extends StatelessWidget {
   static const String routeName = "/account";
@@ -7,40 +11,55 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget buildBody() {
-      return Container(
-          child: Column(
-        children: [
-          Text("Username: "),
-          Text("Email: "),
-          Text("Age: "),
-          Text("Gender: "),
-          Text("Interested in: ")
-        ],
-      ));
-    }
-
-    PreferredSizeWidget _buildAppBar() {
-      return AppBar(
-        backgroundColor: Colors.transparent,
-        title: Text('Account'),
-        leading: IconButton(
-          alignment: Alignment.centerLeft,
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+    return Form(
+        child: Card(
+            child: Column(
+      children: [
+        SizedBox(
+            height: MediaQuery.of(context).size.height * 0.20
         ),
-        actions: const <Widget>[],
-      );
-    }
-
-    return Scaffold(
-      body: buildBody(),
-      appBar: _buildAppBar(),
-    );
+        TextFormField(
+          controller: context.read<AccountViewModel>().displayNameController,
+          decoration: const InputDecoration(
+            labelText: 'Display Name',
+          ),
+        ),
+        TextFormField(
+          controller: context.read<AccountViewModel>().bioController,
+          decoration: const InputDecoration(
+            labelText: 'Bio',
+          ),
+        ),
+        TextFormField(
+          controller: context.read<AccountViewModel>().majorController,
+          decoration: const InputDecoration(
+            labelText: 'Major',
+          ),
+        ),
+        TextFormField(
+          controller: context.read<AccountViewModel>().occupationController,
+          decoration: const InputDecoration(
+            labelText: 'Occupation',
+          ),
+        ),
+        SizedBox(
+            height: MediaQuery.of(context).size.height * 0.15
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Provider.of<AccountViewModel>(context, listen: false).signOut();
+            Navigator.pushNamed(context, MyHomePage.routeName);
+          },
+          child: const Text('Sign Out'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Provider.of<AccountViewModel>(context, listen: false).modifyUser();
+            Navigator.pushNamed(context, MyHomePage.routeName);
+          },
+          child: const Text('Go Home'),
+        ),
+      ],
+    )));
   }
 }

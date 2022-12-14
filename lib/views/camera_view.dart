@@ -26,7 +26,7 @@ class _CameraState extends State<CameraPage> {
   late CameraViewModel cameraViewModel;
   late SwipeViewModel swipeViewModel;
   late bool shouldPreview = false;
-  late Photo currentPhoto;
+  late Photo? currentPhoto;
 
   @override
   void initState() {
@@ -80,7 +80,7 @@ class _CameraState extends State<CameraPage> {
           buttons(context, flashIcon, false),
         ]);
       } else if (shouldPreview) {
-        return preview(context, userAccount, currentPhoto);
+        return preview(context, userAccount, currentPhoto!);
       } else {
         return const Center(child: CircularProgressIndicator());
       }
